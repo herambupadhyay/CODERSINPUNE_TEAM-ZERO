@@ -1,7 +1,8 @@
 import { useRef } from 'react'
 import { gsap, SplitText, useGSAP } from '@/lib/gsap'
 import { usePrefersReducedMotion } from '@/hooks/useMedia'
-import { useDemo } from '@/components/ui/DemoModal'
+import { useNavigate } from 'react-router-dom'
+import { useScroll } from '@/hooks/useScroll'
 import { MagneticButton } from '@/components/ui/MagneticButton'
 import { HERO_EDGES, HERO_FRAGMENTS } from '@/data/hero'
 import { ArrowUpRight } from 'lucide-react'
@@ -35,7 +36,8 @@ export function FinalCta() {
   const rootRef = useRef<HTMLElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
   const reduced = usePrefersReducedMotion()
-  const { open } = useDemo()
+  const navigate = useNavigate()
+  const { scrollTo } = useScroll()
 
   useGSAP(
     () => {
@@ -171,7 +173,7 @@ export function FinalCta() {
         </p>
 
         <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
-          <MagneticButton variant="ember" onClick={() => open('start')}>
+          <MagneticButton variant="ember" onClick={() => navigate('/signup')}>
             Start with ProjectPulse
             <ArrowUpRight
               size={15}
@@ -182,7 +184,7 @@ export function FinalCta() {
           <MagneticButton
             variant="outline"
             className="border-white/30 text-white hover:border-white hover:bg-white hover:text-ink"
-            onClick={() => open('explore')}
+            onClick={() => scrollTo('#product', -60)}
           >
             Revisit the demo
           </MagneticButton>

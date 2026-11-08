@@ -17,6 +17,7 @@ backend/.venv/
 backend/storage/
 
 # Logs & local artifacts
+*.log
 dev.log
 api.log
 api.err.log

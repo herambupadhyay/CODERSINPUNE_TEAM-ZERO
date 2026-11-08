@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { gsap, SplitText, useGSAP } from '@/lib/gsap'
 import { usePrefersReducedMotion } from '@/hooks/useMedia'
 import { useScroll } from '@/hooks/useScroll'
-import { useDemo } from '@/components/ui/DemoModal'
+import { useNavigate } from 'react-router-dom'
 import { MagneticButton } from '@/components/ui/MagneticButton'
 import { HeroNetwork } from '@/components/hero/HeroNetwork'
 import { ArrowDown, Play } from 'lucide-react'
@@ -12,7 +12,7 @@ export function Hero() {
   const headingRef = useRef<HTMLHeadingElement>(null)
   const reduced = usePrefersReducedMotion()
   const { scrollTo } = useScroll()
-  const { open } = useDemo()
+  const navigate = useNavigate()
 
   useGSAP(
     () => {
@@ -121,7 +121,7 @@ export function Hero() {
           </p>
 
           <div data-hero-fade className="mt-10 flex flex-wrap items-center gap-3">
-            <MagneticButton variant="solid" onClick={() => open('explore')}>
+            <MagneticButton variant="solid" onClick={() => navigate('/signup')}>
               Explore ProjectPulse
               <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">
                 →

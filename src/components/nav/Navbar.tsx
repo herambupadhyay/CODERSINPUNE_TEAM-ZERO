@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap'
 import { useScroll } from '@/hooks/useScroll'
-import { useDemo } from '@/components/ui/DemoModal'
+import { useNavigate } from 'react-router-dom'
 import { SECTIONS } from '@/data/nav'
 import { Menu, X, ArrowUpRight } from 'lucide-react'
 
@@ -23,7 +23,7 @@ function LogoMark({ className = '' }: { className?: string }) {
 
 export function Navbar() {
   const { scrollTo } = useScroll()
-  const { open } = useDemo()
+  const navigate = useNavigate()
   const [scrolled, setScrolled] = useState(false)
   const [active, setActive] = useState<string | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -196,13 +196,13 @@ export function Navbar() {
           {/* Right actions */}
           <div className="flex items-center gap-2 sm:gap-3">
             <button
-              onClick={() => open('explore')}
+              onClick={() => navigate('/login')}
               className="hidden px-3 py-2 text-[0.82rem] font-medium text-muted transition-colors hover:text-ink sm:block"
             >
               Sign in
             </button>
             <button
-              onClick={() => open('start')}
+              onClick={() => navigate('/signup')}
               className="group hidden items-center gap-1.5 bg-ink px-5 py-2.5 text-[0.82rem] font-medium text-paper transition-colors duration-300 hover:bg-forest sm:inline-flex"
             >
               Get Started
@@ -255,7 +255,7 @@ export function Navbar() {
           <button
             onClick={() => {
               setMenuOpen(false)
-              open('start')
+              navigate('/signup')
             }}
             className="w-full bg-ink px-6 py-4 text-sm font-medium text-paper"
           >
@@ -264,7 +264,7 @@ export function Navbar() {
           <button
             onClick={() => {
               setMenuOpen(false)
-              open('explore')
+              navigate('/login')
             }}
             className="w-full border border-ink/20 px-6 py-4 text-sm font-medium text-ink"
           >

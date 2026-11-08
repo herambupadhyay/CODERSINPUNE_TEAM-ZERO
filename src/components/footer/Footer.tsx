@@ -1,5 +1,5 @@
 import { useScroll } from '@/hooks/useScroll'
-import { useDemo } from '@/components/ui/DemoModal'
+import { useNavigate } from 'react-router-dom'
 import { SECTIONS } from '@/data/nav'
 import { ArrowUpRight } from 'lucide-react'
 
@@ -44,7 +44,7 @@ function LogoMark({ className = '' }: { className?: string }) {
 
 export function Footer() {
   const { scrollTo } = useScroll()
-  const { open } = useDemo()
+  const navigate = useNavigate()
 
   const go = (target: string) => (e: React.MouseEvent) => {
     e.preventDefault()
@@ -132,7 +132,7 @@ export function Footer() {
                 </li>
                 <li>
                   <button
-                    onClick={() => open('start')}
+                    onClick={() => navigate('/signup')}
                     className="text-[0.88rem] text-ink/80 transition-colors hover:text-ember"
                   >
                     Request early access
