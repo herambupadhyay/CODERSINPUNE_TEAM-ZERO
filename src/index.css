@@ -1,0 +1,142 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-paper: #ffffff;
+  --color-cream: #faf8f4;
+  --color-line: #eaeae5;
+  --color-ink: #20231f;
+  --color-muted: #777a73;
+  --color-forest: #315b45;
+  --color-forest-deep: #244534;
+  --color-forest-soft: #4a7360;
+  --color-ember: #d96b32;
+  --color-ember-soft: #e89161;
+
+  --font-display: 'Fraunces', 'Times New Roman', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: auto;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html,
+  body {
+    overflow-x: clip;
+    background-color: var(--color-paper);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: var(--color-ember);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ember);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  .label-mono {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .display-xl {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.6rem, 5.9vw, 5.75rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+
+  .display-lg {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.25rem, 5vw, 4.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+  }
+
+  .display-md {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.75rem, 3.2vw, 3rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+
+  .body-lg {
+    font-size: clamp(1rem, 1.15vw, 1.1875rem);
+    line-height: 1.65;
+    color: var(--color-muted);
+  }
+
+  .hairline {
+    border-color: var(--color-line);
+  }
+
+  /* SplitText masking helper */
+  .split-line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+}
+
+/* Reduced motion: kill smooth behaviour at the source */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
