@@ -1,8 +1,16 @@
 {
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 60
+    }
+  },
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "https://projectpulse-api-kudj.onrender.com/api/:path*"
+      "source": "/api/(.*)",
+      "destination": "/api/index.py"
     }
   ]
 }
