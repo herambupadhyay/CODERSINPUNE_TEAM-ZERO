@@ -122,7 +122,18 @@ async def process_document_job(document_id: str) -> None:
         db.commit()
 
         settings = get_settings()
-        parsed = parse_file(settings.storage_path / document.storage_path, document.kind)
+        try:
+            parsed = parse_file(settings.storage_path / document.storage_path, document.kind)
+        except Exception as exc:
+            job.stage = "failed"
+            job.status = JobStatus.FAILED
+            job.finished_at = utcnow()
+            job.error_message = f"Failed to parse '{document.original_name}': {str(exc)[:200]}"
+            document.status = DocumentStatus.FAILED
+            document.error_message = job.error_message
+            db.commit()
+            log.exception("PDF parse failed for document %s", document.id)
+            return
         document.page_count = parsed.page_count
         document.char_count = parsed.char_count
         job.stage = "chunking"
