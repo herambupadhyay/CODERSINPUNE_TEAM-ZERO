@@ -180,6 +180,10 @@ async def process_document_job(document_id: str) -> None:
             "extraction_skipped": stats.skipped,
             "extraction_reason": stats.reason,
         }
+        if stats.skipped:
+            document.error_message = f"Extraction skipped: {stats.reason[:200]}"
+        else:
+            document.error_message = None
         job.stage = "completed"
         job.status = JobStatus.COMPLETED
         job.finished_at = utcnow()

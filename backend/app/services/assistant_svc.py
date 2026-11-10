@@ -188,14 +188,20 @@ async def ask(db: Session, *, ctx: ProjectContext, payload: AskIn) -> dict:
     db.add(user_msg)
     db.flush()
 
-    chunks = await retrieve(
-        db,
-        project_id=ctx.project.id,
-        user=ctx.user,
-        role=ctx.role,
-        query=question,
-        top_k=8,
-    )
+    try:
+        chunks = await retrieve(
+            db,
+            project_id=ctx.project.id,
+            user=ctx.user,
+            role=ctx.role,
+            query=question,
+            top_k=8,
+        )
+    except Exception:
+        # If semantic retrieval fails (e.g. embedding/vector issues), fall back to
+        # no chunks so the assistant can still respond rather than 500ing.
+        chunks = []
+        log.exception("Semantic retrieval failed, falling back to empty chunks")
 
     prior = db.scalars(
         select(Message)
@@ -209,17 +215,26 @@ async def ask(db: Session, *, ctx: ProjectContext, payload: AskIn) -> dict:
     prior = list(reversed(prior))
 
     messages = _build_messages(ctx.project.name, question, chunks, prior)
-    result = await chat(
-        messages, json_mode=False, temperature=0.2, max_tokens=1400
-    )
-    content = (result.content or "").strip()
-    if not content:
-        content = _EMPTY_ANSWER
+    try:
+        result = await chat(
+            messages, json_mode=False, temperature=0.2, max_tokens=1400
+        )
+    except LLMError as exc:
+        log.warning("Assistant LLM failed: %s", exc)
+        result = None
+        content = (
+            "I couldn't produce an answer — the AI model is unavailable right now. "
+            "Please try again in a moment."
+        )
+    if result is not None:
+        content = (result.content or "").strip()
+        if not content:
+            content = _EMPTY_ANSWER
 
     meta: dict = {
         "retrieved_count": len(chunks),
-        "model": result.model,
-        "demo_mode": bool(result.demo_mode),
+        "model": result.model if result else None,
+        "demo_mode": bool(result.demo_mode) if result else False,
         "scores": [round(c.score, 3) for c in chunks[:8]],
     }
     if not chunks:
@@ -251,7 +266,7 @@ async def ask(db: Session, *, ctx: ProjectContext, payload: AskIn) -> dict:
         target_type="conversation",
         target_id=conv.id,
         summary=f"Assistant answered ({len(chunks)} sources)",
-        meta={"retrieved": len(chunks), "demo": bool(result.demo_mode)},
+        meta={"retrieved": len(chunks), "demo": bool(result.demo_mode) if result else False},
     )
     db.commit()
     db.refresh(assistant_msg)

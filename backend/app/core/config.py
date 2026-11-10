@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     llm_fallback_model: str = "deepseek-ai/deepseek-v4.1-flash"
     llm_timeout_seconds: int = 90
     embed_model: str = "BAAI/bge-small-en-v1.5"
-    embed_dim: int = 384
+    embed_dim: int = 2048
     demo_mode: bool = False
 
     max_upload_mb: int = 20

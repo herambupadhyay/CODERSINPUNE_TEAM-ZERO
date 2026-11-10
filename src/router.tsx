@@ -15,6 +15,7 @@ import { HandoverPage } from './pages/app/HandoverPage'
 import { KnowledgePage } from './pages/app/KnowledgePage'
 import { OverviewPage } from './pages/app/OverviewPage'
 import { SettingsPage } from './pages/app/SettingsPage'
+import { TreePage } from './pages/app/TreePage'
 
 /** Login / signup are for anonymous visitors only. */
 function AnonymousOnly({ children }: { children: ReactNode }) {
@@ -52,6 +53,7 @@ export const router = createBrowserRouter([
     element: <AppShell />,
     children: [
       { index: true, element: <OverviewPage /> },
+      { path: 'tree', element: <TreePage /> },
       { path: 'documents', element: <DocumentsPage /> },
       { path: 'knowledge', element: <KnowledgePage /> },
       { path: 'graph', element: <GraphPage /> },

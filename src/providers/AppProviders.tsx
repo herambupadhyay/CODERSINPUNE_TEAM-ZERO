@@ -15,7 +15,7 @@ import {
   type UseQueryResult,
 } from '@tanstack/react-query'
 import { Toaster } from 'sonner'
-import { ApiError, authApi, projectsApi, setOnUnauthorized } from '@/lib/api'
+import { ApiError, authApi, demoApi, projectsApi, setOnUnauthorized } from '@/lib/api'
 import { queryClient } from '@/lib/queryClient'
 import type {
   Counts,
@@ -38,6 +38,7 @@ export type AuthContextValue = {
   workspaces: SessionWorkspace[]
   status: AuthStatus
   login: (email: string, password: string) => Promise<SessionOut>
+  loginDemo: (email: string) => Promise<SessionOut>
   signup: (payload: SignupPayload) => Promise<SessionOut>
   logout: () => Promise<void>
   refresh: () => Promise<void>
@@ -100,6 +101,27 @@ function AuthProvider({ children }: { children: ReactNode }) {
     [qc],
   )
 
+  const loginDemo = useCallback(
+    async (email: string) => {
+      const next = await demoApi.quickstart(email)
+      unauthorizedFired.current = false
+      try {
+        if (next.primary_workspace_id) {
+          window.localStorage.setItem('pp.workspace', next.primary_workspace_id)
+        } else {
+          window.localStorage.removeItem('pp.workspace')
+        }
+        window.localStorage.removeItem('pp.project')
+      } catch {
+        /* storage unavailable — the session's primary workspace still applies */
+      }
+      qc.setQueryData(SESSION_KEY, next)
+      void qc.invalidateQueries({ queryKey: SESSION_KEY })
+      return next
+    },
+    [qc],
+  )
+
   const signup = useCallback(
     async (payload: SignupPayload) => {
       const next = await authApi.signup(payload)
@@ -135,12 +157,13 @@ function AuthProvider({ children }: { children: ReactNode }) {
       workspaces: session?.workspaces ?? [],
       status,
       login,
+      loginDemo,
       signup,
       logout,
       refresh,
       enableCheck,
     }),
-    [session, status, login, signup, logout, refresh, enableCheck],
+    [session, status, login, loginDemo, signup, logout, refresh, enableCheck],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

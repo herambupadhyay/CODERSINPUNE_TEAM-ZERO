@@ -402,6 +402,25 @@ export interface AuthorityOverview {
   audit_enabled: boolean
 }
 
+export interface AuthorityGrant {
+  user_id: string
+  name: string
+  email: string
+  granted_by?: string | null
+}
+
+export interface AuthorityDocumentAccess {
+  document_id: string
+  name: string
+  kind: string
+  status: string
+  grants: AuthorityGrant[]
+}
+
+export interface AuthorityAccess {
+  documents: AuthorityDocumentAccess[]
+}
+
 export interface AuthorityMe {
   project_role?: ProjectRole | null
   workspace_role?: WorkspaceRole | null
@@ -598,6 +617,13 @@ export interface DemoStatus {
   counts: Record<string, number>
 }
 
+export interface DemoAccounts {
+  seeded: boolean
+  workspace_id?: string | null
+  project_id?: string | null
+  logins: DemoLogin[]
+}
+
 export interface HealthOut {
   status: string
   database: string
@@ -606,4 +632,26 @@ export interface HealthOut {
   demo_mode: boolean
   embed_dim: number
   version: string
+}
+
+// ---- code snapshot --------------------------------------------------------
+
+export interface CodeTreeFile {
+  path: string
+  size: number
+}
+
+export interface CodeTreeOut {
+  root: string
+  files: CodeTreeFile[]
+  truncated: boolean
+}
+
+export interface CodeFileOut {
+  path: string
+  name: string
+  language: string
+  size: number
+  content: string
+  truncated: boolean
 }

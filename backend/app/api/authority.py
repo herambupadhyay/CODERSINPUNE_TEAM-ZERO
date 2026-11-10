@@ -15,14 +15,37 @@ from app.db.models import Document, ProjectMember, User, Workspace, WorkspaceMem
 from app.db.models.documents import document_grants
 from app.domain.enums import AccessScope, MemberStatus, ProjectRole, WorkspaceRole
 from app.schemas.authority import (
+    AuthorityAccessOut,
+    AuthorityDocumentAccess,
+    AuthorityGrantOut,
     AuthorityMemberOut,
     AuthorityOverview,
     CapabilityMatrixRow,
+    CapabilityUpdateIn,
     RoleCard,
     ScopeCard,
 )
+from app.services.permissions import PermissionError_, can_manage_authority
 
 router = APIRouter()
+
+# Custom capability overrides per project: {project_id: {cap_key: {role: enabled}}}
+# Head can override which roles have which capabilities. Stored in memory.
+_custom_capabilities: dict[uuid.UUID, dict[str, dict[str, bool]]] = {}
+
+
+def _effective_roles(cap: CapabilityMatrixRow, project_id: uuid.UUID) -> list[str]:
+    """Return the effective role list for a capability, applying custom overrides."""
+    overrides = _custom_capabilities.get(project_id, {}).get(cap.key)
+    if not overrides:
+        return cap.roles
+    result = list(cap.roles)
+    for role, enabled in overrides.items():
+        if enabled and role not in result:
+            result.append(role)
+        elif not enabled and role in result:
+            result.remove(role)
+    return result
 
 _P = ProjectRole  # shorthand; role strings below always come from enum values
 
@@ -49,13 +72,13 @@ CAPABILITIES: list[CapabilityMatrixRow] = [
         key="set_access_scope",
         label="Set access scope",
         description="Move a document between project and restricted scope.",
-        roles=_roles(_P.HEAD, _P.LEAD),
+        roles=_roles(_P.HEAD),
     ),
     CapabilityMatrixRow(
         key="grant_restricted_access",
         label="Grant restricted access",
         description="Grant or revoke a person's access to a restricted document.",
-        roles=_roles(_P.HEAD, _P.LEAD),
+        roles=_roles(_P.HEAD),
     ),
     CapabilityMatrixRow(
         key="review_findings",
@@ -104,6 +127,15 @@ CAPABILITIES: list[CapabilityMatrixRow] = [
         label="Manage members",
         description="Add members and change project roles.",
         roles=_roles(_P.HEAD, _P.LEAD),
+    ),
+    CapabilityMatrixRow(
+        key="manage_authority",
+        label="Edit authority",
+        description=(
+            "Change roles, responsibilities and document access for any member. "
+            "Only the project head can do this."
+        ),
+        roles=_roles(_P.HEAD),
     ),
     CapabilityMatrixRow(
         key="ask_assistant",
@@ -162,6 +194,7 @@ _ROLE_LIMITATIONS = {
     ProjectRole.HEAD: ["Workspace-level settings still belong to the workspace owner."],
     ProjectRole.LEAD: [
         "Cannot approve or share handovers — only the head can.",
+        "Cannot change roles, responsibilities or document access — only the head can.",
         "Workspace-level settings still belong to the workspace owner.",
     ],
     ProjectRole.MEMBER: [
@@ -199,13 +232,13 @@ _ROLE_RANK = {
 }
 
 
-def _role_cards() -> list[RoleCard]:
+def _role_cards(project_id: uuid.UUID) -> list[RoleCard]:
     return [
         RoleCard(
             role=role,
             label=_ROLE_LABELS[role],
             summary=_ROLE_SUMMARIES[role],
-            capabilities=[c.key for c in CAPABILITIES if role.value in c.roles],
+            capabilities=[c.key for c in CAPABILITIES if role.value in _effective_roles(c, project_id)],
             limitations=list(_ROLE_LIMITATIONS[role]),
         )
         for role in (ProjectRole.HEAD, ProjectRole.LEAD, ProjectRole.MEMBER, ProjectRole.SUCCESSOR)
@@ -292,12 +325,74 @@ def authority_overview(
     ctx: ProjectContext = Depends(project_context),
     db: Session = Depends(get_db),
 ) -> AuthorityOverview:
+    # Apply custom overrides to the capabilities list before returning.
+    effective_caps = []
+    for cap in CAPABILITIES:
+        effective = CapabilityMatrixRow.model_validate(cap)
+        effective.roles = _effective_roles(cap, ctx.project.id)
+        effective_caps.append(effective)
     return AuthorityOverview(
         members=_members(db, ctx),
-        capabilities=CAPABILITIES,
-        roles=_role_cards(),
+        capabilities=effective_caps,
+        roles=_role_cards(ctx.project.id),
         scopes=list(_SCOPES),
         audit_enabled=True,
+    )
+
+
+@router.get("/{project_id}/authority/access", response_model=AuthorityAccessOut)
+def authority_access(
+    ctx: ProjectContext = Depends(project_context),
+    db: Session = Depends(get_db),
+) -> AuthorityAccessOut:
+    """Restricted documents and who is explicitly granted access (head only)."""
+    if not can_manage_authority(ctx.role):
+        raise PermissionError_("Only the project head can manage document access.")
+
+    documents = db.scalars(
+        select(Document)
+        .where(
+            Document.project_id == ctx.project.id,
+            Document.access_scope == AccessScope.RESTRICTED,
+        )
+        .order_by(Document.original_name)
+    ).all()
+
+    grants_by_doc: dict[uuid.UUID, list[AuthorityGrantOut]] = {doc.id: [] for doc in documents}
+    if documents:
+        rows = db.execute(
+            select(
+                document_grants.c.document_id,
+                document_grants.c.user_id,
+                document_grants.c.granted_by,
+                User.name,
+                User.email,
+            )
+            .join(User, User.id == document_grants.c.user_id)
+            .where(document_grants.c.document_id.in_(list(grants_by_doc)))
+            .order_by(User.name)
+        ).all()
+        for row in rows:
+            grants_by_doc[row.document_id].append(
+                AuthorityGrantOut(
+                    user_id=row.user_id,
+                    name=row.name,
+                    email=row.email,
+                    granted_by=row.granted_by,
+                )
+            )
+
+    return AuthorityAccessOut(
+        documents=[
+            AuthorityDocumentAccess(
+                document_id=doc.id,
+                name=doc.original_name,
+                kind=doc.kind,
+                status=doc.status,
+                grants=grants_by_doc.get(doc.id, []),
+            )
+            for doc in documents
+        ]
     )
 
 
@@ -309,7 +404,7 @@ def authority_me(
     """Per-caller capability flags — the frontend disables buttons from this."""
     is_owner = _caller_is_workspace_owner(ctx, db)
     can = {
-        cap.key: (ctx.role.value in cap.roles)
+        cap.key: (ctx.role.value in _effective_roles(cap, ctx.project.id))
         or (cap.workspace_owner_allowed and is_owner)
         for cap in CAPABILITIES
     }
@@ -319,4 +414,35 @@ def authority_me(
         "is_workspace_owner": is_owner,
         "can": can,
         "limitations": list(_ROLE_LIMITATIONS[ctx.role]),
+    }
+
+
+@router.patch("/{project_id}/authority/capabilities")
+def update_capability(
+    project_id: uuid.UUID,
+    payload: CapabilityUpdateIn,
+    ctx: ProjectContext = Depends(project_context),
+) -> dict:
+    """Toggle one capability on/off for one project role. Head only."""
+    if not can_manage_authority(ctx.role):
+        raise PermissionError_("Only the project head can edit authority capabilities.")
+    # Validate the capability key exists.
+    cap_keys = {c.key for c in CAPABILITIES}
+    if payload.key not in cap_keys:
+        raise ValueError(f"Unknown capability key: {payload.key}")
+    project_overrides = _custom_capabilities.setdefault(project_id, {})
+    role_overrides = project_overrides.setdefault(payload.key, {})
+    role_overrides[payload.role.value] = payload.enabled
+    # Clean up empty overrides.
+    if not role_overrides:
+        project_overrides.pop(payload.key, None)
+    if not project_overrides:
+        _custom_capabilities.pop(project_id, None)
+    return {
+        "key": payload.key,
+        "role": payload.role.value,
+        "enabled": payload.enabled,
+        "effective_roles": _effective_roles(
+            next(c for c in CAPABILITIES if c.key == payload.key), project_id
+        ),
     }

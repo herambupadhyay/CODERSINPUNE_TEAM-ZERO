@@ -43,6 +43,7 @@ from app.services import audit
 from app.services.permissions import (
     NotFoundError,
     PermissionError_,
+    can_manage_authority,
     can_manage_project,
     can_upload,
     get_project_member,
@@ -258,8 +259,8 @@ def update_document_scope(
     ctx: ProjectContext = Depends(project_context),
     db: Session = Depends(get_db),
 ) -> DocumentOut:
-    if not can_manage_project(ctx.role):
-        raise PermissionError_("Only a project head or lead can change document access.")
+    if not can_manage_authority(ctx.role):
+        raise PermissionError_("Only the project head can change document access.")
     document = _load_document(db, ctx, doc_id)
     scope = _require_scope(payload.access_scope)
     previous = document.access_scope
@@ -387,8 +388,8 @@ def list_grants(
     ctx: ProjectContext = Depends(project_context),
     db: Session = Depends(get_db),
 ) -> list[DocumentGrantOut]:
-    if not can_manage_project(ctx.role):
-        raise PermissionError_("Only a project head or lead can manage document access.")
+    if not can_manage_authority(ctx.role):
+        raise PermissionError_("Only the project head can manage document access.")
     document = _load_document(db, ctx, doc_id)
     # document_grants is a Core table: paired with an entity it would expand
     # flat into one wide row, so project the exact columns with unique labels
@@ -425,8 +426,8 @@ def create_grant(
     ctx: ProjectContext = Depends(project_context),
     db: Session = Depends(get_db),
 ) -> DocumentGrantOut:
-    if not can_manage_project(ctx.role):
-        raise PermissionError_("Only a project head or lead can manage document access.")
+    if not can_manage_authority(ctx.role):
+        raise PermissionError_("Only the project head can manage document access.")
     document = _load_document(db, ctx, doc_id)
     if document.access_scope != AccessScope.RESTRICTED:
         raise ValueError("Grants apply to restricted documents.")
@@ -477,8 +478,8 @@ def revoke_grant(
     ctx: ProjectContext = Depends(project_context),
     db: Session = Depends(get_db),
 ) -> OkResponse:
-    if not can_manage_project(ctx.role):
-        raise PermissionError_("Only a project head or lead can manage document access.")
+    if not can_manage_authority(ctx.role):
+        raise PermissionError_("Only the project head can manage document access.")
     document = _load_document(db, ctx, doc_id)
     existing = db.scalar(
         select(document_grants).where(

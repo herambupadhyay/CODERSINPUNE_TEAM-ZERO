@@ -53,6 +53,17 @@ app.add_middleware(
 register_handlers(app)
 
 
+@app.exception_handler(Exception)
+async def all_exception_handler(request, exc):
+    """Last-resort handler: never return a raw 500 to the client."""
+    log.exception("Unhandled error: %s", exc)
+    from fastapi.responses import JSONResponse
+    return JSONResponse(
+        status_code=500,
+        content={"error": "internal_error", "detail": "The server encountered an error. Please try again in a moment."},
+    )
+
+
 @app.get(f"{API_PREFIX}/health", response_model=HealthOut, tags=["meta"])
 def health() -> HealthOut:
     db_status = "unknown"
@@ -86,6 +97,7 @@ from app.api import (  # noqa: E402
     assistant,
     authority,
     auth,
+    code,
     demo,
     documents,
     handover,
@@ -100,6 +112,7 @@ app.include_router(auth.router, prefix=f"{API_PREFIX}/auth", tags=["auth"])
 app.include_router(workspaces.router, prefix=f"{API_PREFIX}/workspaces", tags=["workspaces"])
 app.include_router(projects.router, prefix=f"{API_PREFIX}/projects", tags=["projects"])
 app.include_router(documents.router, prefix=f"{API_PREFIX}/projects", tags=["documents"])
+app.include_router(code.router, prefix=f"{API_PREFIX}/projects", tags=["code"])
 app.include_router(processing.router, prefix=f"{API_PREFIX}/projects", tags=["processing"])
 app.include_router(knowledge.router, prefix=f"{API_PREFIX}/projects", tags=["knowledge"])
 app.include_router(authority.router, prefix=f"{API_PREFIX}/projects", tags=["authority"])

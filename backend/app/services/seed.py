@@ -62,6 +62,7 @@ PROJECT_NAME = "Payments Platform"
 PROJECT_DESC = "Card acquiring, ledger and settlement services for the Northwind platform."
 PROJECT_TAGS = ["payments", "go", "postgres", "on-call"]
 DEMO_PASSWORD = "Handover!2026"
+DEMO_OWNER_EMAIL = "admin@projectpulse.dev"
 SEED_RUN = "demo_seed"
 CHUNK_TARGET = 900
 
@@ -1534,6 +1535,42 @@ def demo_status(db: Session, actor: User) -> dict:
     }
 
 
+def demo_accounts(db: Session) -> dict:
+    """Public demo directory: fixed role accounts + whether data is loaded.
+
+    No authentication required — these credentials are published on the login
+    page by design (hackathon demo).
+    """
+    workspace = db.scalar(
+        select(Workspace).where(Workspace.name == WORKSPACE_NAME).order_by(Workspace.created_at)
+    )
+    project = _first_project(db, workspace.id) if workspace is not None else None
+    logins = _logins(db, project)
+    if workspace is not None and project is not None:
+        owner = db.scalar(
+            select(User).where(func.lower(User.email) == DEMO_OWNER_EMAIL)
+        )
+        owner_member = (
+            get_workspace_member(db, owner.id, workspace.id) if owner is not None else None
+        )
+        if owner is not None and owner_member is not None and owner_member.role == WorkspaceRole.OWNER:
+            logins.insert(
+                0,
+                {
+                    "email": owner.email,
+                    "name": owner.name,
+                    "project_role": ProjectRole.HEAD.value,
+                    "password": DEMO_PASSWORD,
+                },
+            )
+    return {
+        "seeded": workspace is not None,
+        "workspace_id": str(workspace.id) if workspace is not None else None,
+        "project_id": str(project.id) if project is not None else None,
+        "logins": logins,
+    }
+
+
 async def reset_demo(db: Session, actor: User, workspace_id: uuid.UUID) -> dict:
     """Delete the demo workspace. Refuses anything that is not the demo workspace."""
     workspace = db.get(Workspace, workspace_id)
@@ -1565,8 +1602,10 @@ async def reset_demo(db: Session, actor: User, workspace_id: uuid.UUID) -> dict:
 
 __all__ = [
     "DEMO_DIR",
+    "DEMO_OWNER_EMAIL",
     "DEMO_PASSWORD",
     "WORKSPACE_NAME",
+    "demo_accounts",
     "demo_status",
     "reset_demo",
     "seed_demo",

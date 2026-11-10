@@ -135,6 +135,11 @@ def can_manage_members(role: ProjectRole | WorkspaceRole | None) -> bool:
     return role in {ProjectRole.HEAD, ProjectRole.LEAD, WorkspaceRole.OWNER}
 
 
+def can_manage_authority(role: ProjectRole | WorkspaceRole | None) -> bool:
+    """Only the project head (workspace owner resolves to HEAD) edits authority."""
+    return role in {ProjectRole.HEAD, WorkspaceRole.OWNER}
+
+
 def can_review(role: ProjectRole | WorkspaceRole | None) -> bool:
     """Review/verify/correct knowledge findings."""
     return role in REVIEW_ROLES

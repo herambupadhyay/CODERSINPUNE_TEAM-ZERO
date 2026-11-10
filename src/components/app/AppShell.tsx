@@ -6,6 +6,7 @@ import {
   BookOpen,
   Database,
   FileText,
+  FolderTree,
   LayoutDashboard,
   LogOut,
   Menu,
@@ -49,6 +50,7 @@ type NavItem = {
 
 const NAV: NavItem[] = [
   { to: '/app', label: 'Overview', icon: LayoutDashboard, end: true },
+  { to: '/app/tree', label: 'Project Tree', icon: FolderTree },
   { to: '/app/documents', label: 'Documents', icon: FileText },
   { to: '/app/knowledge', label: 'Knowledge', icon: BookOpen },
   { to: '/app/graph', label: 'Graph', icon: Share2 },

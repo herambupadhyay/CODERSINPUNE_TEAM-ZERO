@@ -47,6 +47,7 @@ from app.services import audit
 from app.services.permissions import (
     NotFoundError,
     PermissionError_,
+    can_manage_authority,
     can_manage_members,
     can_manage_project,
     effective_project_role,
@@ -320,8 +321,8 @@ def update_project_member(
     ctx: ProjectContext = Depends(project_context),
     db: Session = Depends(get_db),
 ) -> ProjectMemberOut:
-    if not can_manage_members(ctx.role):
-        raise PermissionError_("Only a project head or lead can change roles.")
+    if not can_manage_authority(ctx.role):
+        raise PermissionError_("Only the project head can change roles or responsibilities.")
     member = db.scalar(
         select(ProjectMember).where(
             ProjectMember.project_id == ctx.project.id,

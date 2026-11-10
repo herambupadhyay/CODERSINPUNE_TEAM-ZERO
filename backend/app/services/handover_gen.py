@@ -581,7 +581,7 @@ async def generate_handover(
                 ],
                 json_mode=True,
                 temperature=0.1,
-                max_tokens=8192,
+                max_tokens=4096,
             )
             raw = _parse_json_object(result.content)
             model_name = result.model or settings.llm_model
@@ -599,7 +599,7 @@ async def generate_handover(
                 ],
                 json_mode=False,
                 temperature=0.0,
-                max_tokens=8192,
+                max_tokens=4096,
             )
             if result.demo_mode:
                 raw = {}

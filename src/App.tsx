@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { ScrollTrigger } from '@/lib/gsap'
 import { ScrollProvider } from '@/hooks/useScroll'
-import { DemoModalProvider } from '@/components/ui/DemoModal'
 import { LiquidCursor } from '@/components/cursor/LiquidCursor'
 import { Navbar } from '@/components/nav/Navbar'
 import { Hero } from '@/components/hero/Hero'
@@ -12,6 +11,7 @@ import { HandoverReport } from '@/components/handover/HandoverReport'
 import { DepartureMap } from '@/components/departure/DepartureMap'
 import { TrustSection } from '@/components/trust/TrustSection'
 import { FinalCta } from '@/components/cta/FinalCta'
+import { DemoAccess } from '@/components/app/DemoAccess'
 import { Footer } from '@/components/footer/Footer'
 
 export default function App() {
@@ -34,7 +34,6 @@ export default function App() {
 
   return (
     <ScrollProvider>
-      <DemoModalProvider>
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:bg-ink focus:px-4 focus:py-3 focus:text-sm focus:text-paper"
@@ -53,11 +52,11 @@ export default function App() {
           <HandoverReport />
           <DepartureMap />
           <TrustSection />
+          <DemoAccess compact />
           <FinalCta />
         </main>
 
         <Footer />
-      </DemoModalProvider>
     </ScrollProvider>
   )
 }

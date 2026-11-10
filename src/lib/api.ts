@@ -2,10 +2,14 @@ import type {
   ActivityOut,
   ApiErrorBody,
   AskOut,
+  AuthorityAccess,
   AuthorityMe,
   AuthorityOverview,
   ChunkOut,
+  CodeFileOut,
+  CodeTreeOut,
   ConversationOut,
+  DemoAccounts,
   DemoStatus,
   DocumentGrantOut,
   DocumentOut,
@@ -73,7 +77,7 @@ type UnauthorizedHandler = () => void
 
 let onUnauthorized: UnauthorizedHandler | null = null
 
-/** Registered by AuthProvider — fired on any 401 response. */
+/** Registered by AuthProvider â€” fired on any 401 response. */
 export function setOnUnauthorized(handler: UnauthorizedHandler | null): void {
   onUnauthorized = handler
 }
@@ -88,7 +92,7 @@ async function toApiError(res: Response): Promise<ApiError> {
     if (body && typeof body.error === 'string' && body.error.trim()) error = body.error
     if (body && typeof body.detail === 'string' && body.detail.trim()) detail = body.detail
   } catch {
-    /* non-JSON body — keep the fallback message */
+    /* non-JSON body â€” keep the fallback message */
   }
   const apiError = new ApiError(res.status, error, detail)
   if (res.status === 401 && onUnauthorized) onUnauthorized()
@@ -254,6 +258,14 @@ export const documentsApi = {
     }),
 }
 
+// ---- code snapshot --------------------------------------------------------
+
+export const codeApi = {
+  tree: (projectId: string) => api<CodeTreeOut>(`/projects/${projectId}/code`),
+  file: (projectId: string, path: string) =>
+    api<CodeFileOut>(`/projects/${projectId}/code/file${qs({ path })}`),
+}
+
 // ---- processing -----------------------------------------------------------
 
 export const processingApi = {
@@ -289,6 +301,12 @@ export const graphApi = {
 export const authorityApi = {
   overview: (projectId: string) => api<AuthorityOverview>(`/projects/${projectId}/authority`),
   me: (projectId: string) => api<AuthorityMe>(`/projects/${projectId}/authority/me`),
+  access: (projectId: string) => api<AuthorityAccess>(`/projects/${projectId}/authority/access`),
+  updateCapability: (projectId: string, payload: { key: string; role: string; enabled: boolean }) =>
+    api<{ key: string; role: string; enabled: boolean; effective_roles: string[] }>(
+      `/projects/${projectId}/authority/capabilities`,
+      { method: 'PATCH', json: payload },
+    ),
 }
 
 // ---- handovers ------------------------------------------------------------
@@ -365,6 +383,9 @@ export const activityApi = {
 
 export const demoApi = {
   status: () => api<DemoStatus>('/demo/status'),
+  accounts: () => api<DemoAccounts>('/demo/accounts'),
+  quickstart: (email: string) =>
+    api<SessionOut & { seeded: boolean }>('/demo/quickstart', { method: 'POST', json: { email } }),
   seed: () => api<Record<string, unknown>>('/demo/seed', { method: 'POST' }),
   reset: (workspaceId?: string) =>
     api<Record<string, unknown>>('/demo/reset', {

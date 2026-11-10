@@ -60,7 +60,35 @@ class DelegationRequest(ApiModel):
     responsibility: str | None = Field(default=None, max_length=140)
 
 
+class AuthorityGrantOut(ApiModel):
+    user_id: UUID
+    name: str
+    email: str
+    granted_by: UUID | None = None
+
+
+class CapabilityUpdateIn(ApiModel):
+    """Toggle one capability on/off for one project role (head only)."""
+
+    key: str
+    role: ProjectRole
+    enabled: bool
+
+
+class AuthorityDocumentAccess(ApiModel):
+    document_id: UUID
+    name: str
+    kind: str
+    status: str
+    grants: list[AuthorityGrantOut] = []
+
+
+class AuthorityAccessOut(ApiModel):
+    documents: list[AuthorityDocumentAccess] = []
+
+
 __all__ = [
     "CapabilityMatrixRow", "RoleCard", "ScopeCard", "AuthorityMemberOut",
-    "AuthorityOverview", "DelegationRequest",
+    "AuthorityOverview", "DelegationRequest", "AuthorityGrantOut",
+    "AuthorityDocumentAccess", "AuthorityAccessOut", "CapabilityUpdateIn",
 ]

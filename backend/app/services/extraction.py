@@ -293,31 +293,39 @@ async def extract_from_document(
     demo_seen = False
     failed_windows = 0
     last_error = ""
-    for window in _windows(chunks):
-        # explicit budget: reasoning models otherwise burn the default
-        # 4096 tokens on reasoning and return no JSON payload
+    windows = _windows(chunks)
+
+    async def _extract_window(window: list[EvidenceChunk]) -> None:
+        nonlocal failed_windows, last_error, demo_seen
         try:
             payload = await chat_json(
                 [
                     {"role": "system", "content": SYSTEM_PROMPT},
                     {"role": "user", "content": _user_message(document, window)},
                 ],
-                max_tokens=8192,
+                max_tokens=2048,
             )
         except (LLMError, json.JSONDecodeError) as exc:
-            # one flaky window must not sink the whole extraction
             failed_windows += 1
             last_error = str(exc)
             log.warning(
-                "Extraction window %s failed for document %s: %s",
-                failed_windows, document.id, exc,
+                "Extraction window failed for document %s: %s", document.id, exc,
             )
-            continue
+            return
         if payload.get("demo") is True:
             demo_seen = True
-            continue
+            return
         raw_items.extend(_as_list(payload.get("items")))
         raw_relationships.extend(_as_list(payload.get("relationships")))
+
+    # Process windows concurrently (bounded semaphore to avoid overwhelming the API)
+    sem = asyncio.Semaphore(3)
+
+    async def _guarded(window: list[EvidenceChunk]) -> None:
+        async with sem:
+            await _extract_window(window)
+
+    await asyncio.gather(*(_guarded(w) for w in windows))
     if failed_windows and not raw_items and not raw_relationships:
         log.warning("Extraction LLM failure for document %s: %s", document.id, last_error)
         return ExtractionStats(
