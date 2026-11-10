@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://projectpulse-api-kudj.onrender.com/api/:path*"
+    }
+  ]
+}
