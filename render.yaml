@@ -31,5 +31,3 @@ databases:
   - name: projectpulse-db
     plan: free
     databaseName: projectpulse
-    ipAllowlist:
-      - value: 0.0.0.0/0
