@@ -615,7 +615,9 @@ async def generate_handover(
             model_name = "demo"
     except LLMError as exc:
         log.warning("Handover generation LLM failed: %s", exc)
-        raise ValueError("AI generation failed — try again in a moment.") from exc
+        raw = {}
+        demo_mode = True
+        model_name = "demo"
 
     if raw:
         sections_out, findings_out, llm_summary = _resolve_llm_report(
