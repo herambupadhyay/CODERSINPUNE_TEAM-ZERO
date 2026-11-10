@@ -195,7 +195,7 @@ async def ask(db: Session, *, ctx: ProjectContext, payload: AskIn) -> dict:
             user=ctx.user,
             role=ctx.role,
             query=question,
-            top_k=8,
+            top_k=15,
         )
     except Exception:
         # If semantic retrieval fails (e.g. embedding/vector issues), fall back to

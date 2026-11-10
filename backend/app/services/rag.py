@@ -62,6 +62,18 @@ async def retrieve(
         .limit(max(1, min(int(top_k), 50)))
     )
     rows = db.execute(stmt).all()
+    # --- Per-document diversity: never let one document crowd out the rest ---
+    # Group rows by document, keep only the top 3 per document, then re-sort by
+    # distance and trim to top_k overall.
+    by_doc: dict[uuid.UUID, list] = {}
+    for row in rows:
+        by_doc.setdefault(row.document_id, []).append(row)
+    diverse_rows: list = []
+    for doc_rows in by_doc.values():
+        doc_rows.sort(key=lambda r: r.distance)
+        diverse_rows.extend(doc_rows[:3])
+    diverse_rows.sort(key=lambda r: r.distance)
+    rows = diverse_rows[: max(1, min(int(top_k), 50))]
     return [
         RetrievedChunk(
             chunk_id=row.id,
