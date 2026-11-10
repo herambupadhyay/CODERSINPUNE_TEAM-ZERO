@@ -69,6 +69,7 @@ class A:
     HANDOVER_CHANGES = "handover.request_changes"
     HANDOVER_SHARE = "handover.share"
     HANDOVER_ARCHIVE = "handover.archive"
+    HANDOVER_DELETE = "handover.delete"
     HANDOVER_FINDING_REVIEW = "handover.finding.review"
     ASSISTANT_MESSAGE = "assistant.message"
     DEMO_SEED = "demo.seed"

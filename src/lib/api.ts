@@ -347,6 +347,10 @@ export const handoverApi = {
     ),
   markdown: (projectId: string, handoverId: string) =>
     apiBlob(`/projects/${projectId}/handovers/${handoverId}/markdown`),
+  delete: (projectId: string, handoverId: string) =>
+    api<{ ok: boolean }>(`/projects/${projectId}/handovers/${handoverId}`, {
+      method: 'DELETE',
+    }),
 }
 
 // ---- assistant / search / activity ---------------------------------------

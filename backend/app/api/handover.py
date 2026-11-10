@@ -4,7 +4,7 @@ from __future__ import annotations
 import uuid
 
 from fastapi import APIRouter, Depends, Query, Response
-from sqlalchemy import func, select
+from sqlalchemy import delete, func, select
 from sqlalchemy.orm import Session
 
 from app.core.deps import ProjectContext, get_db, project_context
@@ -77,6 +77,8 @@ def _can_dict(ctx: ProjectContext, h: Handover) -> dict:
     reviewer = _reviewer(ctx)
     edit_ok = reviewer and h.status in _EDIT_STATUSES
     approver = can_approve_handover(ctx.role) or ctx.ws_role == WorkspaceRole.OWNER
+    is_head = ctx.role.value == "head"
+    is_owner = ctx.ws_role == WorkspaceRole.OWNER
     return {
         "generate": edit_ok,
         "edit": edit_ok,
@@ -86,6 +88,7 @@ def _can_dict(ctx: ProjectContext, h: Handover) -> dict:
         "share": approver and h.status == HandoverStatus.APPROVED,
         "archive": approver,
         "review_findings": reviewer and h.status in _REVIEW_FINDING_STATUSES,
+        "delete": is_head or is_owner,
         "export": True,
     }
 
@@ -732,6 +735,51 @@ def export_markdown(
             "Content-Disposition": f'attachment; filename="handover-{h.id}.md"'
         },
     )
+
+
+@router.delete("/{project_id}/handovers/{handover_id}", response_model=OkResponse)
+def delete_handover(
+    handover_id: uuid.UUID,
+    ctx: ProjectContext = Depends(project_context),
+    db: Session = Depends(get_db),
+) -> OkResponse:
+    """Permanently delete a handover and all its sections, findings, shares, and approvals."""
+    h = _load_handover(db, ctx, handover_id)
+    # Only project head or workspace owner can delete
+    is_head = ctx.role.value == "head"
+    is_owner = ctx.ws_role == WorkspaceRole.OWNER
+    if not (is_head or is_owner):
+        raise PermissionError_("Only the project head or workspace owner can delete a handover.")
+
+    title = h.title
+    # Cascade delete related rows manually (FKs may not have ON DELETE CASCADE)
+    db.execute(
+        delete(HandoverShare).where(HandoverShare.handover_id == h.id)
+    )
+    db.execute(
+        delete(HandoverFinding).where(HandoverFinding.handover_id == h.id)
+    )
+    db.execute(
+        delete(HandoverSection).where(HandoverSection.handover_id == h.id)
+    )
+    db.execute(
+        delete(HandoverApproval).where(HandoverApproval.handover_id == h.id)
+    )
+    db.delete(h)
+
+    audit.record(
+        db,
+        action=audit.A.HANDOVER_DELETE,
+        actor_id=ctx.user.id,
+        project_id=ctx.project.id,
+        workspace_id=ctx.project.workspace_id,
+        target_type="handover",
+        target_id=handover_id,
+        summary=f"Deleted handover: {title[:80]}",
+        meta={},
+    )
+    db.commit()
+    return OkResponse(ok=True)
 
 
 __all__ = ["router"]

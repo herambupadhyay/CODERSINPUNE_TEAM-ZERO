@@ -13,6 +13,7 @@ import {
   Pencil,
   Plus,
   RefreshCw,
+  Trash2,
   X,
 } from 'lucide-react'
 import { ApiError, authorityApi, handoverApi, projectsApi } from '@/lib/api'
@@ -574,7 +575,7 @@ function NewHandoverModal({
 
 /* ----------------------------------------------------------- detail view */
 
-type DialogKind = 'submit' | 'approve' | 'changes' | 'share' | 'archive' | 'regenerate'
+type DialogKind = 'submit' | 'approve' | 'changes' | 'share' | 'archive' | 'regenerate' | 'delete'
 
 function HandoverDetail({ id, onBack }: { id: string; onBack: () => void }) {
   const { projectId } = useCurrentProject()
@@ -644,6 +645,16 @@ function HandoverDetail({ id, onBack }: { id: string; onBack: () => void }) {
     onError: (err) => toast.error(errMsg(err)),
   })
 
+  const deleteMutation = useMutation({
+    mutationFn: () => handoverApi.delete(projectId as string, id),
+    onSuccess: () => {
+      toast.success('Handover deleted.')
+      setDialog(null)
+      invalidate()
+    },
+    onError: (err) => toast.error(errMsg(err)),
+  })
+
   const exportMutation = useMutation({
     mutationFn: async () => {
       const blob = await handoverApi.markdown(projectId as string, id)
@@ -685,6 +696,11 @@ function HandoverDetail({ id, onBack }: { id: string; onBack: () => void }) {
     if (dialog === 'regenerate') {
       setDialog(null)
       generateMutation.mutate()
+      return
+    }
+    if (dialog === 'delete') {
+      setDialog(null)
+      deleteMutation.mutate()
       return
     }
     if (dialog === 'changes' && !note.trim()) {
@@ -854,6 +870,18 @@ function HandoverDetail({ id, onBack }: { id: string; onBack: () => void }) {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>Files it away — it stays exportable.</TooltipContent>
+            </Tooltip>
+          ) : null}
+
+          {can['delete'] ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="danger" onClick={() => openDialog('delete')}>
+                  <Trash2 size={14} aria-hidden />
+                  Delete
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Permanently removes this handover.</TooltipContent>
             </Tooltip>
           ) : null}
 
@@ -1117,6 +1145,11 @@ function Dialogs({
       description: 'It drops out of the active list. You can still find it, read it and export it.',
       confirm: 'Archive',
     },
+    delete: {
+      title: 'Delete this handover?',
+      description: 'This permanently removes the handover and all its sections, findings and approvals. It cannot be undone.',
+      confirm: 'Delete',
+    },
   }
 
   if (!kind) return null
@@ -1126,7 +1159,7 @@ function Dialogs({
     <Modal open onOpenChange={(open) => (!open ? onClose() : undefined)}>
       <ModalContent title={m.title} description={m.description}>
         <div className="flex flex-col gap-4">
-          {kind === 'approve' || kind === 'archive' || kind === 'share' ? (
+          {kind === 'approve' || kind === 'archive' || kind === 'share' || kind === 'delete' ? (
             <Field label="Note (optional)" htmlFor="ph-note">
               <Textarea
                 id="ph-note"
@@ -1169,7 +1202,7 @@ function Dialogs({
               Cancel
             </Button>
             <Button
-              variant={kind === 'archive' ? 'danger' : 'primary'}
+              variant={kind === 'archive' || kind === 'delete' ? 'danger' : 'primary'}
               loading={pending}
               onClick={onConfirm}
             >

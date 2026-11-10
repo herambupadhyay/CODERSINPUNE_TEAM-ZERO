@@ -510,7 +510,7 @@ export interface HandoverUpdatePayload {
 }
 
 export interface HandoverActionPayload {
-  action: 'submit' | 'approve' | 'request_changes' | 'share' | 'archive'
+  action: 'submit' | 'approve' | 'request_changes' | 'share' | 'archive' | 'delete'
   note?: string | null
   recipient_user_id?: string | null
 }
