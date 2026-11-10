@@ -19,7 +19,7 @@ services:
       - key: DATABASE_URL
         fromDatabase:
           name: projectpulse-db
-          propertyName: connectionString
+          property: connectionString
       - key: SESSION_SECRET
         generateValue: true
       - key: LLM_API_KEY
