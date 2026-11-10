@@ -1,0 +1,35 @@
+# Render blueprint: API (FastAPI) + managed Postgres with pgvector.
+# Deploy: Render Dashboard → New + → Blueprint → this repository.
+# Notes:
+# - Free Postgres: 1 GB, EXPIRES 30 DAYS AFTER CREATION (upgrade or reseed after).
+# - Free web: spins down after 15 min idle (~1 min cold start), 750 hrs/month.
+# - Set LLM_API_KEY after creation (Dashboard → service → Environment).
+services:
+  - type: web
+    name: projectpulse-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: alembic upgrade head && exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-10000}
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.16"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: projectpulse-db
+          propertyName: connectionString
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: LLM_API_KEY
+        sync: false
+      - key: DEMO_MODE
+        value: "false"
+
+databases:
+  - name: projectpulse-db
+    plan: free
+    databaseName: projectpulse
+    ipAllowlist:
+      - value: 0.0.0.0/0

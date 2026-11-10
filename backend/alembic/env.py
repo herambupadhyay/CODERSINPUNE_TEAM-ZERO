@@ -40,6 +40,10 @@ def run_migrations_offline() -> None:
 
 def run_migrations_online() -> None:
     engine = create_engine(_database_url())
+    # Fresh managed databases (Render, RDS, ...) lack pgvector; VECTOR columns need it.
+    with engine.connect() as connection:
+        connection.exec_driver_sql("CREATE EXTENSION IF NOT EXISTS vector")
+        connection.commit()
     with engine.connect() as connection:
         context.configure(
             connection=connection,

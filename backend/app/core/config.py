@@ -4,7 +4,7 @@ from __future__ import annotations
 from functools import lru_cache
 from pathlib import Path
 
-from pydantic import Field
+from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BACKEND_ROOT = Path(__file__).resolve().parents[2]
@@ -44,6 +44,16 @@ class Settings(BaseSettings):
 
     api_host: str = "127.0.0.1"
     api_port: int = 8000
+
+    @field_validator("database_url", "test_database_url", mode="after")
+    @classmethod
+    def _normalize_db_url(cls, value: str) -> str:
+        """Accept managed-DB URL schemes (e.g. Render's postgres://) as psycopg URLs."""
+        if value.startswith("postgres://"):
+            return "postgresql+psycopg://" + value[len("postgres://") :]
+        if value.startswith("postgresql://"):
+            return "postgresql+psycopg://" + value[len("postgresql://") :]
+        return value
 
     @property
     def cors_origin_list(self) -> list[str]:
