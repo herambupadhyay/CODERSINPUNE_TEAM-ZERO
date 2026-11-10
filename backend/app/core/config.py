@@ -35,8 +35,8 @@ class Settings(BaseSettings):
     llm_model: str = "nvidia/nemotron-3.5-lightning-30b-a3b"
     llm_fallback_model: str = "deepseek-ai/deepseek-v4.1-flash"
     llm_timeout_seconds: int = 90
-    embed_model: str = "nvidia/nemotron-3-embed-1b"
-    embed_dim: int = 2048
+    embed_model: str = "sentence-transformers/all-MiniLM-L6-v2"
+    embed_dim: int = 384
     demo_mode: bool = False
 
     max_upload_mb: int = 20
