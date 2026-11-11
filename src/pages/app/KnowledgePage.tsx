@@ -217,7 +217,7 @@ function CorrectModal({
     <Modal open onOpenChange={(o) => !o && onClose()}>
       <ModalContent
         title="Correct this finding"
-        description="Replace the extracted text with the verified wording. The original stays visible as history."
+        description="Replace the extracted text with the verified wording."
       >
         <div className="flex flex-col gap-4">
           <div>

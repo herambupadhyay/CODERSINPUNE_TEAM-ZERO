@@ -18,7 +18,7 @@ const PRINCIPLES = [
   {
     n: '03',
     title: 'Human review before sharing',
-    body: 'AI drafts. People read, edit and accept. Nothing leaves the workspace without a reviewer.',
+    body: 'Drafts are checked by people before anything is final. Nothing leaves the workspace without a reviewer.',
   },
   {
     n: '04',
@@ -112,7 +112,7 @@ function ApprovalCard() {
         {status === 'approved' ? 'Approved' : 'Revised'}
       </div>
 
-      <p className="label-mono text-ember">AI-generated finding</p>
+              <p className="label-mono text-ember">Generated finding</p>
       <h4 className="mt-3 max-w-md font-display text-[1.4rem] leading-snug text-ink">
         No documented rollback procedure found
       </h4>
@@ -189,7 +189,7 @@ export function TrustSection() {
         <div className="mt-10 grid gap-8 lg:grid-cols-12">
           <div className="col-span-12 lg:col-span-7">
             <Reveal as="h2" mode="lines" className="display-lg text-ink">
-              AI can organise the knowledge. People remain in control.
+              Systems organise the knowledge. People remain in control.
             </Reveal>
 
             {/* principles as editorial rows */}

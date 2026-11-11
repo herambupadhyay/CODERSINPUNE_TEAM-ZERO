@@ -1,4 +1,4 @@
-"""AI conversation + audit models."""
+"""Conversation + audit models."""
 from __future__ import annotations
 
 import uuid

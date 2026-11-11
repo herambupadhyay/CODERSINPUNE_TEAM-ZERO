@@ -223,8 +223,6 @@ function ProjectProvider({ children }: { children: ReactNode }) {
   )
   const [storedProjectId, setStoredProjectId] = useState<string | null>(() => readLs(LS_PROJECT))
 
-  // Resolve the workspace during render: stored choice wins if still valid,
-  // otherwise fall back to the session's primary workspace (then the first).
   const workspaceId = useMemo(() => {
     if (status !== 'authenticated') return storedWorkspaceId
     if (storedWorkspaceId && workspaces.some((w) => w.id === storedWorkspaceId)) {

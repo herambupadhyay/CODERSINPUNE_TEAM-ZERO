@@ -36,7 +36,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="ProjectPulse API",
-    description="AI Handover Assistant — authority-aware knowledge reconstruction.",
+    description="ProjectPulse API — authority-aware knowledge reconstruction.",
     version="1.0.0",
     lifespan=lifespan,
 )

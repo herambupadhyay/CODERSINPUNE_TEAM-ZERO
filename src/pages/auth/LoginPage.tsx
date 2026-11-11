@@ -34,7 +34,7 @@ export function AuthPanel() {
           </span>
           <span className="font-display text-lg text-paper">ProjectPulse</span>
         </a>
-        <p className="label-mono pp-auth-kicker mt-10">AI Handover Assistant</p>
+        <p className="label-mono pp-auth-kicker mt-10">ProjectPulse</p>
         <h2 className="mt-3 max-w-md font-display text-[2.4rem] leading-[1.06] tracking-tight text-paper">
           Pick up where the last engineer left off.
         </h2>

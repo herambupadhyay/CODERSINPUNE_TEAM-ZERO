@@ -673,7 +673,6 @@ function HandoverDetail({ id, onBack }: { id: string; onBack: () => void }) {
     onError: (err) => toast.error(errMsg(err)),
   })
 
-  // Gentle creeping progress while the long-running generate call is open.
   useEffect(() => {
     if (!generateMutation.isPending) return
     const timer = window.setInterval(() => {

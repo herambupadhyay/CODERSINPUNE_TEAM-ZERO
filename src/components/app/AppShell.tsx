@@ -168,7 +168,7 @@ export function AppShell() {
               ProjectPulse
             </span>
             <span className="label-mono mt-1 block text-[9px] text-muted">
-              AI HANDOVER ASSISTANT
+              PROJECTPULSE
             </span>
           </span>
           <IconButton

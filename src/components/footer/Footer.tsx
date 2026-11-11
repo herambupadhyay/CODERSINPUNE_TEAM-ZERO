@@ -64,7 +64,7 @@ export function Footer() {
               </span>
             </a>
             <p className="mt-6 max-w-sm text-[0.92rem] leading-relaxed text-muted">
-              An AI handover assistant that reconstructs project knowledge, checks it against
+              A project knowledge assistant that reconstructs project knowledge, checks it against
               evidence, and scopes it to the people who are authorised to receive it.
             </p>
             <p className="mt-6 max-w-sm border-l-2 border-ember pl-4 font-display text-[1.05rem] leading-snug text-ink italic">
@@ -158,10 +158,10 @@ export function Footer() {
 
         <div className="mt-8 flex flex-col gap-4 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="label-mono text-muted">
-            © {YEAR} ProjectPulse — front-end design experiment
+            © {YEAR} ProjectPulse
           </p>
           <p className="label-mono text-muted">
-            Fictional product · sample data only · no backend
+            Built for internal use
           </p>
         </div>
       </div>

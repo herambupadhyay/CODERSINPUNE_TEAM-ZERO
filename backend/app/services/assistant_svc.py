@@ -198,10 +198,8 @@ async def ask(db: Session, *, ctx: ProjectContext, payload: AskIn) -> dict:
             top_k=15,
         )
     except Exception:
-        # If semantic retrieval fails (e.g. embedding/vector issues), fall back to
-        # no chunks so the assistant can still respond rather than 500ing.
         chunks = []
-        log.exception("Semantic retrieval failed, falling back to empty chunks")
+        log.exception("Semantic retrieval failed, returning empty chunks")
 
     prior = db.scalars(
         select(Message)
@@ -220,10 +218,10 @@ async def ask(db: Session, *, ctx: ProjectContext, payload: AskIn) -> dict:
             messages, json_mode=False, temperature=0.2, max_tokens=1400
         )
     except LLMError as exc:
-        log.warning("Assistant LLM failed: %s", exc)
+        log.warning("Assistant generation failed: %s", exc)
         result = None
         content = (
-            "I couldn't produce an answer — the AI model is unavailable right now. "
+            "I couldn't produce an answer — the assistant is unavailable right now. "
             "Please try again in a moment."
         )
     if result is not None:

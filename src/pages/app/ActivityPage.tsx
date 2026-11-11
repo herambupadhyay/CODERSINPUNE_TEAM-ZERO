@@ -27,7 +27,7 @@ const ACTION_LABELS: Record<string, string> = {
   'document.process': 'Document processed',
   'knowledge.review': 'Knowledge reviewed',
   'handover.create': 'Handover started',
-  'handover.generate': 'Handover draft generated',
+  'handover.generate': 'Handover generated',
   'handover.submit': 'Handover submitted',
   'handover.approve': 'Handover approved',
   'handover.request_changes': 'Changes requested',

@@ -394,7 +394,7 @@ export function SettingsPage() {
                   state={boolState(health.pgvector)}
                 />
                 <HealthRow
-                  label="AI configured"
+                  label="Configured"
                   value={String(health.ai_configured)}
                   state={boolState(health.ai_configured)}
                 />

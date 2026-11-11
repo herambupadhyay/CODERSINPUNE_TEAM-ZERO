@@ -216,8 +216,6 @@ def chunk_text(parsed: ParsedDoc) -> list[ChunkDraft]:
             seq += 1
         if end >= len(text):
             break
-        # ~120 chars of context bleed into the next chunk; fall back to a
-        # plain cut when the chunk itself is too short to overlap
         if has_content:
             pos = end - OVERLAP if end - OVERLAP > pos else end
         else:

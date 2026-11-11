@@ -221,11 +221,11 @@ export function HandoverReport() {
             </dl>
           </div>
 
-          {/* AI note */}
+          {/* Note */}
           <div className="flex items-start gap-3 border-b border-line bg-forest/[0.05] px-5 py-4 sm:px-7">
             <Sparkles size={14} strokeWidth={1.8} className="mt-0.5 shrink-0 text-ember" />
             <p className="text-[0.82rem] leading-relaxed text-ink/75">
-              <span className="label-mono mr-2 text-forest">AI finding</span>
+              <span className="label-mono mr-2 text-forest">Finding</span>
               Generated from 214 authorised files. Human review required before sharing —
               confidence labels below are not certifications.
             </p>

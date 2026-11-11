@@ -1,4 +1,4 @@
-"""AI knowledge extraction: LLM-backed, provenance-verified, failure-tolerant.
+"""Knowledge extraction: provenance-verified, failure-tolerant.
 
 Every persisted claim must point at verbatim quotes that are checked against
 the chunk text; unverifiable evidence is dropped rather than trusted. A provider
@@ -118,8 +118,6 @@ def _resolve_evidence(
     if target is not None and quote in norm_texts[seq]:
         return target, quote[:QUOTE_MAX]
 
-    # the model occasionally mis-numbers chunks: fall back to locating the
-    # quote's opening words anywhere in the document
     probe = _word_trim(quote[:60], floor=12)
     if len(probe) >= 12:
         for chunk in chunks:

@@ -91,7 +91,7 @@ export function Hero() {
       {/* editorial top rule */}
       <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-12">
         <div className="flex items-center justify-between border-b border-line pb-4" data-hero-fade>
-          <span className="label-mono text-muted">AI Handover Assistant</span>
+          <span className="label-mono text-muted">ProjectPulse</span>
           <span className="label-mono hidden text-muted sm:block">
             Knowledge Intelligence <span className="text-ember">·</span> Authority Intelligence
           </span>

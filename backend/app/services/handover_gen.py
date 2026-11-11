@@ -1,7 +1,7 @@
-"""Handover report generation: impact analysis + LLM/deterministic authoring.
+"""Handover report generation: impact analysis + deterministic authoring.
 
-Generation is all-or-nothing: the LLM (or demo path) builds sections/findings
-in memory first; only then are existing rows replaced and committed.
+Generation is all-or-nothing: sections/findings are built in memory first;
+only then are existing rows replaced and committed.
 """
 from __future__ import annotations
 

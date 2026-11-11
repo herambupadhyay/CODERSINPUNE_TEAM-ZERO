@@ -1,4 +1,4 @@
-"""OpenAI-compatible chat client (NVIDIA NIM) with fallback + demo mode.
+"""OpenAI-compatible chat client with fallback + demo mode.
 
 Contract used by extraction, assistant and handover generation:
     result = await chat(messages, json_mode=True)
@@ -68,7 +68,6 @@ def _extract_content(data: dict[str, Any]) -> str:
     message = choice.get("message") or {}
     content = message.get("content")
     if not isinstance(content, str) or not content.strip():
-        # some models answer via reasoning only — fall back to it if present
         reasoning = message.get("reasoning_content")
         if isinstance(reasoning, str) and reasoning.strip():
             return reasoning.strip()

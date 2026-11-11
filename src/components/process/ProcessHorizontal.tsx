@@ -42,7 +42,7 @@ const STAGES: Stage[] = [
     n: '04',
     title: 'Handover',
     lead: 'Make continuity possible.',
-    body: 'Generate structured, role-appropriate handovers that help the next person continue with clarity — approved by people, not just generated.',
+    body: 'Generate structured, role-appropriate handovers that help the next person continue with clarity — approved by people.',
     icon: ArrowRight,
     meta: 'Scoped · Reviewed · Approved',
   },

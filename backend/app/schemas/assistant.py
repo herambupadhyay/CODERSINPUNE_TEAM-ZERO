@@ -1,4 +1,4 @@
-"""AI assistant + search + activity schemas."""
+"""Assistant + search + activity schemas."""
 from __future__ import annotations
 
 from datetime import datetime

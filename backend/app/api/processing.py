@@ -207,7 +207,7 @@ async def process_document_job(document_id: str) -> None:
             "Processed document %s in %sms (%s chunks, %s items)",
             document.id, job.stats["ms"], len(chunks), stats.items_created,
         )
-    except Exception as exc:  # noqa: BLE001 — one bad file must never kill the worker
+    except Exception as exc:
         log.exception("Document processing failed for %s", document_id)
         try:
             db.rollback()
