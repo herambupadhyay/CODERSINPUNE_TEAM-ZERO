@@ -315,6 +315,17 @@ export interface KnowledgeReviewPayload {
   corrected_text?: string | null
 }
 
+export interface KnowledgeItemCreate {
+  type: KnowledgeType
+  title: string
+  description?: string
+  reasoning?: string | null
+  attributes?: Record<string, unknown>
+  evidence_status?: EvidenceStatus
+  access_scope?: AccessScope
+  subject_user_id?: string | null
+}
+
 export interface EvidenceOut {
   id: string
   item_id: string

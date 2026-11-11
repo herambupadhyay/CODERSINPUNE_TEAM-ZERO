@@ -6,13 +6,16 @@ import {
   ChevronDown,
   MessageSquare,
   Pencil,
+  Plus,
   RotateCcw,
   Search,
   X,
 } from 'lucide-react'
 import { ApiError, authorityApi, knowledgeApi } from '@/lib/api'
 import type {
+  AccessScope,
   EvidenceStatus,
+  KnowledgeItemCreate,
   KnowledgeItemOut,
   KnowledgeReviewPayload,
   KnowledgeType,
@@ -320,6 +323,123 @@ function CommentModal({
   )
 }
 
+function CreateModal({
+  onClose,
+  onDone,
+  pending,
+}: {
+  onClose: () => void
+  onDone: (payload: KnowledgeItemCreate) => void
+  pending: boolean
+}) {
+  const [type, setType] = useState<KnowledgeType>('decision')
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [reasoning, setReasoning] = useState('')
+  const [evidenceStatus, setEvidenceStatus] = useState<EvidenceStatus>('supported')
+  const [accessScope, setAccessScope] = useState<AccessScope>('project')
+  const [error, setError] = useState<string | null>(null)
+
+  const submit = () => {
+    if (!title.trim()) {
+      setError('Provide a title.')
+      return
+    }
+    onDone({
+      type,
+      title: title.trim(),
+      description: description.trim() || '',
+      reasoning: reasoning.trim() || null,
+      evidence_status: evidenceStatus,
+      access_scope: accessScope,
+    })
+    setError(null)
+  }
+
+  return (
+    <Modal open onOpenChange={(o) => !o && onClose()}>
+      <ModalContent title="Create knowledge item" description="Add a decision, task, risk, dependency, person, gap, question or contact manually.">
+        <div className="flex flex-col gap-4">
+          <div>
+            <p className="label-mono mb-1.5 text-muted">Type</p>
+            <Select
+              value={type}
+              onChange={(v) => setType(v as KnowledgeType)}
+              options={TYPES.map((t) => ({ value: t, label: TYPE_LABEL[t] }))}
+              className="min-w-[240px]"
+            />
+          </div>
+          <div>
+            <p className="label-mono mb-1.5 text-muted">Title</p>
+            <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              invalid={!!error}
+              placeholder="e.g. Sarah owns retry-worker"
+              aria-label="Title"
+            />
+          </div>
+          <div>
+            <p className="label-mono mb-1.5 text-muted">Description</p>
+            <Textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="What was decided, owned, or identified…"
+              aria-label="Description"
+              className="min-h-[100px]"
+            />
+          </div>
+          <div>
+            <p className="label-mono mb-1.5 text-muted">Reasoning (optional)</p>
+            <Textarea
+              value={reasoning}
+              onChange={(e) => setReasoning(e.target.value)}
+              placeholder="Why this matters or how it was established"
+              aria-label="Reasoning"
+              className="min-h-[80px]"
+            />
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <div>
+              <p className="label-mono mb-1.5 text-muted">Evidence status</p>
+              <Select
+                value={evidenceStatus}
+                onChange={(v) => setEvidenceStatus(v as EvidenceStatus)}
+                options={EVIDENCES.map((e) => ({ value: e, label: EVIDENCE_LABEL[e] }))}
+                className="min-w-[180px]"
+              />
+            </div>
+            <div>
+              <p className="label-mono mb-1.5 text-muted">Scope</p>
+              <Select
+                value={accessScope}
+                onChange={(v) => setAccessScope(v as AccessScope)}
+                options={[
+                  { value: 'project', label: 'Project (all members)' },
+                  { value: 'restricted', label: 'Restricted (granted only)' },
+                ]}
+                className="min-w-[180px]"
+              />
+            </div>
+          </div>
+          {error ? (
+            <p role="alert" className="text-sm text-ember">{error}</p>
+          ) : null}
+          <div className="flex items-center justify-end gap-2">
+            <Button variant="outline" onClick={onClose} disabled={pending}>
+              Cancel
+            </Button>
+            <Button loading={pending} onClick={submit}>
+              <Plus size={14} aria-hidden />
+              Create item
+            </Button>
+          </div>
+        </div>
+      </ModalContent>
+    </Modal>
+  )
+}
+
 /* ------------------------------------------------------------------ page */
 
 function ActionButton({
@@ -374,6 +494,7 @@ export function KnowledgePage() {
   const [openId, setOpenId] = useState<string | null>(null)
   const [correctId, setCorrectId] = useState<string | null>(null)
   const [commentId, setCommentId] = useState<string | null>(null)
+  const [createId, setCreateId] = useState<string | null>(null)
 
   useEffect(() => {
     const timer = setTimeout(() => setDq(q.trim()), 350)
@@ -435,6 +556,18 @@ export function KnowledgePage() {
       void qc.invalidateQueries({ queryKey: ['graph', projectId] })
       setCorrectId(null)
       setCommentId(null)
+    },
+    onError: (err) => toast.error(errMsg(err)),
+  })
+
+  const createMutation = useMutation({
+    mutationFn: (payload: KnowledgeItemCreate) =>
+      knowledgeApi.create(projectId as string, payload),
+    onSuccess: (_data) => {
+      toast.success('Knowledge item created.')
+      void qc.invalidateQueries({ queryKey: ['knowledge'] })
+      void qc.invalidateQueries({ queryKey: ['graph', projectId] })
+      setCreateId(null)
     },
     onError: (err) => toast.error(errMsg(err)),
   })
@@ -687,11 +820,19 @@ export function KnowledgePage() {
         title="Knowledge"
         description="Decisions, tasks, risks and gaps extracted from your documents — with the evidence behind each one."
         actions={
-          pages[0] && pages[0].pending_review > 0 ? (
-            <span className="pd-badge" data-tone="ember">
-              {pages[0].pending_review} pending review
-            </span>
-          ) : null
+          <>
+            {canReview && (
+              <Button variant="primary" onClick={() => setCreateId('create')}>
+                <Plus size={14} aria-hidden />
+                Create item
+              </Button>
+            )}
+            {pages[0] && pages[0].pending_review > 0 ? (
+              <span className="pd-badge" data-tone="ember">
+                {pages[0].pending_review} pending review
+              </span>
+            ) : null}
+          </>
         }
       />
 
@@ -774,6 +915,14 @@ export function KnowledgePage() {
           pending={reviewMutation.isPending}
           onClose={() => setCommentId(null)}
           onDone={(payload) => act(commentItem.id, payload)}
+        />
+      ) : null}
+
+      {projectId && createId === 'create' ? (
+        <CreateModal
+          pending={createMutation.isPending}
+          onClose={() => setCreateId(null)}
+          onDone={(payload) => createMutation.mutate(payload)}
         />
       ) : null}
     </div>

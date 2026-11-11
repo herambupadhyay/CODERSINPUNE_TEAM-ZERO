@@ -71,6 +71,7 @@ class A:
     HANDOVER_ARCHIVE = "handover.archive"
     HANDOVER_DELETE = "handover.delete"
     HANDOVER_FINDING_REVIEW = "handover.finding.review"
+    KNOWLEDGE_CREATE = "knowledge.create"
     ASSISTANT_MESSAGE = "assistant.message"
     DEMO_SEED = "demo.seed"
     DEMO_RESET = "demo.reset"

@@ -1,0 +1,858 @@
+PROJECTPULSE  /  ROUND 1 PRODUCT PROPOSAL
+CONFIDENTIALITY-AWARE CONCEPT PROPOSAL  •  1
+ROUND 1  /  PRODUCT PROPOSAL
+PROJECTPULSE
+AI HANDOVER ASSISTANT
+Don’t just transfer work. Transfer understanding.
+THE CHALLENGE
+Prevent critical knowledge from leaving with people by turning authorised, scattered project information into an 
+evidence-linked, human-approved and permission-aware handover.
+Product direction: universal project handover assistant | Hybrid model: persistent project memory + event-based 
+transition | Initial ingestion: authorised documents
+SUBMISSION DETAILS
+VALUE
+Team name
+[ENTER OFFICIAL TEAM NAME]
+Institution / organisation
+[ENTER INSTITUTION]
+Team lead
+[ENTER FULL NAME]
+Participant count
+[ENTER NUMBER]
+Submission round
+Round 1 - The Plan
+Working product name. Replace all bracketed team fields and verify participant spellings before submission.
+PROJECTPULSE  /  ROUND 1 PRODUCT PROPOSAL
+CONFIDENTIALITY-AWARE CONCEPT PROPOSAL  •  2
+01 / EXECUTIVE SNAPSHOT
+A continuity layer for teams
+ProjectPulse preserves not just project files, but the evidence, relationships and permissions needed to continue 
+work responsibly.
+Project knowledge rarely lives in one place. A plan may describe a task, meeting notes may explain why it changed, 
+a technical document may record the dependency, and a person may be the only one who knows what remains 
+unfinished. When that person leaves, the organisation can retain the files while losing the context that makes those 
+files useful.
+ProjectPulse is a universal AI handover assistant designed to reconstruct a project’s current state from authorised 
+documents and prepare a role-appropriate handover when responsibilities change. It builds a persistent, structured 
+memory of people, tasks, decisions, dependencies, risks and evidence, then uses that memory to create a transition 
+package for a specific incoming person.
+CORE PRODUCT PROMISE
+A successor should be able to understand what is happening, why it is happening, what remains unfinished, what 
+could go wrong, and what they are authorised to do next - with important claims traceable to their source.
+Two connected intelligence systems
+SYSTEM
+QUESTION IT ANSWERS
+OUTPUT
+Knowledge Intelligence
+What does the project know, and how is 
+it connected?
+Evidence-backed project state, decision 
+timeline, ownership, dependencies, risks 
+and gaps.
+Authority Intelligence
+Who may access, manage, approve, 
+delegate or receive each part?
+Scoped permissions, delegation 
+boundaries and permission-filtered 
+handovers.
+What makes the proposal different
+Departure Impact Analysis: identifies the tasks, decisions, dependencies and unresolved risks affected when a named 
+member exits.
+Authority Graph: models scoped delegation and access as explicit relationships rather than assuming that seniority or 
+team membership grants universal access.
+Evidence-first generation: each important statement is tied to a source location and labelled as supported, inferred, 
+conflicting or missing.
+Human-controlled continuity: a responsible person corrects and approves the handover before controlled sharing.
+Round 1 scope decision
+The first demonstrable version will be document-first and project-focused. It will support authorised PDF, DOCX, 
+TXT, Markdown and CSV inputs, one project workspace, structured extraction, evidence-linked reconstruction, a 
+departure-triggered handover, human approval and controlled successor access. Live integrations with chat 
+platforms and repositories are intentionally deferred.
+PROJECTPULSE  /  ROUND 1 PRODUCT PROPOSAL
+CONFIDENTIALITY-AWARE CONCEPT PROPOSAL  •  3
+02 / PROBLEM UNDERSTANDING
+The real loss is context, not files
+The challenge brief describes knowledge scattered across messages, repositories, meeting notes and task boards - 
+with reasoning and unfinished work often staying with individuals.
+What disappears during a transition
+KNOWLEDGE TYPE
+WHAT MAY BE LOST
+WHY A FILE ALONE IS NOT ENOUGH
+Decision context
+Why an approach was selected; alternatives 
+rejected; constraints.
+A document may show the final decision 
+but not the reasoning or later changes.
+Work state
+What is complete, in progress, blocked or 
+awaiting validation.
+A task title does not necessarily preserve 
+current status or the next safe action.
+Dependencies
+Which task, person, service or approval 
+another activity relies on.
+Dependencies may be spread across 
+technical notes, plans and conversations.
+Operational memory
+Recurring problems, workarounds, 
+contacts and escalation paths.
+The most useful detail may exist only in 
+repeated experience or informal notes.
+Accountability
+Who owns an action and who can approve 
+or change it.
+Ownership and authority are often 
+confused or recorded inconsistently.
+Why ordinary documentation and generic summarisation fall short
+Fragmentation: each source describes only part of the project and may use different names or dates.
+Time: old notes can conflict with newer decisions; a summary must distinguish current state from history.
+Missing evidence: a plausible answer is not necessarily a verified organisational fact.
+Permissions: access to one connected document must not automatically reveal everything inside it or every related 
+source.
+No transition lens: a generic summary does not answer what the departing person owns, what becomes ownerless, or 
+what the successor should do first.
+OUR PROBLEM DEFINITION
+Teams need a trusted transition process that reconstructs project state from authorised evidence, surfaces 
+uncertainty, identifies the impact of a person’s departure and shares only the information the incoming person is 
+allowed to receive.
+Scope of the problem we will solve
+ProjectPulse will focus on the knowledge-handover moment: a member leaves, changes role or transfers 
+responsibility. It will not attempt to replace project-management software, become a general-purpose enterprise 
+search engine, or automate managerial decisions. The product’s job is to make a transition understandable, 
+actionable and controlled.
+Brief alignment: Problem Statement and detailed challenge, source brief page 1; suggested capabilities and trust requirements, page 2.
+PROJECTPULSE  /  ROUND 1 PRODUCT PROPOSAL
+CONFIDENTIALITY-AWARE CONCEPT PROPOSAL  •  4
+03 / USERS & CONTEXT
+Universal core, adaptable delivery
+The platform is designed for teams that depend on shared projects, rotating responsibilities and information held 
+across multiple people.
+USER GROUP
+TYPICAL TRANSITION
+WHAT THEY NEED
+Employees and project teams
+An engineer, analyst or project coordinator 
+leaves.
+Current work state, technical or operational 
+dependencies, owners, risks and next 
+actions.
+Student clubs and event teams
+A committee member graduates or hands 
+over a portfolio.
+Vendor/contact context, event timelines, 
+approvals, reusable processes and 
+unfinished tasks.
+Volunteers and NGOs
+A volunteer or coordinator exits a 
+campaign.
+Beneficiary-safe context, activity status, 
+partner contacts and continuity actions.
+Research groups
+A researcher or assistant changes projects.
+Experiment status, decisions, dataset 
+provenance, methods, limitations and 
+pending validation.
+Startups and small organisations
+A founder or early employee transfers a 
+critical function.
+Operational dependencies, 
+customer/process context, ownership and 
+decision history.
+Primary personas in the first product journey
+Project Head / Workspace Owner: defines the project boundary, appoints roles, controls delegation and approves who 
+receives the handover.
+Departing Member: the person whose responsibilities and working knowledge are being transferred; may answer 
+targeted clarification questions.
+Incoming Successor: receives a role-specific handover, follows cited next actions and acknowledges receipt.
+Team Lead / Reviewer: verifies technical or functional accuracy within a delegated scope before approval.
+A realistic first scenario
+A backend contributor is leaving a student-built web platform. The project plan, API specification, meeting notes and 
+task export are uploaded with permission. ProjectPulse connects the contributor to the payment API, links a 
+database migration decision to its supporting notes, identifies an untested migration and finds that no rollback 
+procedure is documented. The project lead reviews the claims, assigns the next actions and shares an approved 
+backend handover with the incoming contributor - without exposing unrelated administrative or confidential 
+material.
+Validation discipline
+NO FABRICATED RESEARCH
+This proposal is grounded in the organiser’s challenge brief and a structured analysis of the stated failure modes. No 
+survey counts, interviews or measured impact results are claimed. The team should validate the workflow with short 
+interviews or scenario tests during Round 2 and record findings transparently.
+Initial validation questions: What information did a previous handover omit? Which source types were actually available? What did 
+the successor have to ask the departing member? Which details were restricted? How was correctness approved?
+PROJECTPULSE  /  ROUND 1 PRODUCT PROPOSAL
+CONFIDENTIALITY-AWARE CONCEPT PROPOSAL  •  5
+04 / PROPOSED SOLUTION
+A hybrid project memory + handover assistant
+ProjectPulse continuously organises authorised project knowledge, then activates a focused handover workflow 
+when a transition occurs.
+How the hybrid model works
+LAYER
+WHEN IT OPERATES
+WHAT IT DOES
+Persistent project memory
+As authorised documents are added or 
+updated.
+Extracts structured knowledge, links 
+evidence, preserves decision context 
+and records uncertainty.
+Event-based handover
+When a member leaves or 
+responsibilities move.
+Analyses the person’s contribution and 
+dependencies, creates a successor-
+specific handover and routes it for 
+review.
+The handover is assembled, not merely summarised
+For a selected departing member and incoming role, the system retrieves only authorised evidence and assembles a 
+continuation view containing: project overview; transferred responsibilities; work in progress; decisions and their 
+supporting sources; dependencies and blockers; risks and recurring issues; important contacts where permitted; 
+missing or conflicting information; and a prioritised next-step plan.
+Distinctive product mechanisms
+Departure Impact Analysis: traces the departing member’s known ownership and relationships to show affected tasks, 
+dependencies, approvals and knowledge areas.
+Knowledge Gap Radar: highlights undocumented procedures, ownerless work, unsupported claims and contradictions 
+that need human attention.
+Decision Trail: reconstructs decision sequence and links the current state to source evidence. It does not invent 
+rationale when the source does not contain it.
+Role-adaptive handover: changes the level and scope of detail according to the successor’s approved role and 
+permissions.
+Authority Graph: models who can grant, view, edit, approve, delegate and share within a defined project scope.
+Human review and acknowledgement: enables correction, rejection, approval, version history and receipt 
+confirmation.
+KEY PRINCIPLE
+Receiving someone’s knowledge does not mean inheriting their authority. ProjectPulse transfers the minimum useful 
+context for the new responsibility - not the departing person’s permissions.
+Product boundaries
+The AI recommends and organises; it does not independently certify truth, decide employment matters, grant 
+privileges or publish a handover without approval. A user remains responsible for confirming the content and the 
+recipient’s access.
+PROJECTPULSE  /  ROUND 1 PRODUCT PROPOSAL
+CONFIDENTIALITY-AWARE CONCEPT PROPOSAL  •  6
+05 / COMPLETE PRODUCT WORKFLOW
+From authorised sources to approved continuity
+The workflow follows the organiser’s five required stages: Connect, Reconstruct, Verify, Review and Handover.
+STAGE
+USER / SYSTEM ACTION
+OUTPUT / CONTROL
+1. Connect
+Owner creates a project workspace, defines 
+the initial roles and uploads authorised 
+documents. The system records source 
+identity, version and access scope.
+Permission-tagged source library; only 
+supported formats and approved material 
+enter processing.
+2. Reconstruct
+Parser extracts text and structure. AI identifies 
+people, roles, tasks, decisions, dates, blockers, 
+dependencies and risks; relationships are 
+linked across documents.
+Structured project state and timeline; source 
+locations retained for every extracted item.
+3. Verify
+System checks evidence coverage, date 
+conflicts, contradictory statements and 
+missing ownership. Each claim receives a 
+status.
+Evidence-linked claims labelled supported, 
+inferred, conflicting or missing; no silent 
+assumption promotion.
+4. Review
+Reviewer inspects the departure-impact 
+analysis, edits or rejects claims, assigns 
+actions and approves the handover version.
+Approved, versioned handover; reviewer 
+identity and changes recorded.
+5. Handover
+Authority service checks the successor’s 
+approved scope. The system shares only 
+permitted content and records 
+acknowledgement.
+Role-appropriate continuation plan, controlled 
+access and receipt status.
+Trigger and feedback loop
+A handover can be initiated by an authorised owner or reviewer by selecting the departing member, the 
+responsibilities being transferred and the incoming role. The departing member may be invited to answer targeted 
+questions about unresolved gaps. New information is marked as member-provided, linked to its origin and routed 
+through review; it is not silently treated as verified fact.
+After the handover, corrections and new project documents update the project memory. A later handover can therefore 
+reuse the reviewed context while still checking freshness and permission scope.
+PROJECTPULSE  /  ROUND 1 PRODUCT PROPOSAL
+CONFIDENTIALITY-AWARE CONCEPT PROPOSAL  •  7
+06 / KNOWLEDGE INTELLIGENCE
+Reconstruct the project as connected evidence
+The Knowledge Graph represents what the project knows and how its pieces relate. It is a logical graph stored in a 
+feasible relational data model for the MVP.
+Knowledge objects and relationships
+OBJECTS
+RELATIONSHIPS
+EXAMPLE
+People, roles, tasks, decisions, milestones, 
+risks, dependencies, contacts, documents 
+and evidence chunks.
+owns, assigned_to, depends_on, blocks, 
+decided_by, supports, supersedes, 
+mentioned_in, resolved_by.
+A person owns a task; the task depends on 
+an API; a meeting note records a decision; 
+a later document supersedes the earlier 
+plan.
+Evidence model
+Every important knowledge item stores a source identifier and precise location where available: document name, 
+page, heading, row or text span. The system preserves the extracted claim separately from its source evidence, so 
+reviewers can inspect the original material instead of trusting generated prose.
+STATUS
+MEANING
+HANDLING
+Supported
+One or more authorised sources directly 
+support the claim.
+May appear as a factual statement with 
+citations, subject to review.
+Inferred
+The system connects evidence but the 
+conclusion is not directly stated.
+Must be visibly labelled and reviewed; 
+never presented as confirmed fact.
+Conflicting
+Sources disagree or present incompatible 
+dates/owners/status.
+Show both source positions and request a 
+human decision.
+Missing
+The handover needs information that is not 
+present in authorised evidence.
+Create an explicit gap or question; do not 
+fill it with a guess.
+Temporal reasoning
+The system distinguishes current, historical and superseded information using source dates, version metadata and 
+explicit relationships where available. When recency is unclear, it shows the conflict or uncertainty rather than 
+deciding solely from a model-generated guess.
+MVP IMPLEMENTATION CHOICE
+Use PostgreSQL tables for knowledge entities and relationship edges, plus source/evidence metadata. Add pgvector 
+for semantic retrieval where useful. A dedicated graph database can be evaluated later if relationship scale or query 
+complexity justifies it.
+PROJECTPULSE  /  ROUND 1 PRODUCT PROPOSAL
+CONFIDENTIALITY-AWARE CONCEPT PROPOSAL  •  8
+07 / AUTHORITY GRAPH & DELEGATION
+Make access a first-class part of handover
+ProjectPulse models authority separately from project knowledge. This prevents a correct handover from becoming 
+an accidental disclosure.
+Authority is explicit, scoped and delegable
+The Project Head or Workspace Owner acts as the root authority for a workspace. They can define roles and grant 
+scoped powers to team leads - for example, authority over backend documentation, operations records or research 
+material. A lead may further delegate only the specific powers and resources they have been granted, within the 
+same or narrower scope.
+AUTHORITY DIMENSION
+EXAMPLE CONTROL
+Resource scope
+Project-wide, department, task group, document, knowledge 
+category or individual record.
+Allowed action
+View, upload, edit, assign, approve, delegate or share. These are 
+separate privileges.
+Delegation limit
+A delegate cannot grant broader scope or stronger actions than 
+they hold. Delegation may be time-bound and revocable.
+Review boundary
+Approval and sharing rights are not automatically included in 
+ordinary contributor access.
+Auditability
+Record who granted, changed, delegated, revoked, approved or 
+acknowledged an access decision.
+Example: new backend successor
+The incoming backend developer receives approved API documentation, assigned backend tasks, relevant decision 
+history, migration status and the next actions needed to continue the work. They do not automatically receive 
+finance, HR, unrelated research files, global workspace administration or the departing member’s approval rights. A 
+project lead can grant additional access when there is a justified need.
+NON-NEGOTIABLE RULE
+A person’s place in an organisational hierarchy does not automatically expose every lower-level resource. Access is 
+determined by explicit permissions and scope, not by graph proximity or seniority.
+How the two graphs work together
+The Knowledge Graph identifies the information relevant to a transition. The Authority Graph and permission 
+service determine which of those sources and claims the requester may retrieve, review and share. The graphs are 
+connected through resource references, but the Knowledge Graph is never treated as an access-control mechanism.
+PROJECTPULSE  /  ROUND 1 PRODUCT PROPOSAL
+CONFIDENTIALITY-AWARE CONCEPT PROPOSAL  •  9
+08 / FEATURES & SAMPLE HANDOVER
+Useful output for the next person
+The feature set is deliberately centred on the organiser’s success conditions: traceable, actionable and permission-
+aware.
+FEATURE
+USER VALUE
+MVP STATUS
+Authorised document intake
+Bring project evidence into one controlled 
+workspace.
+Core
+Structured extraction
+Identify roles, tasks, decisions, ownership, 
+dates and risks.
+Core
+Project knowledge graph
+Connect facts and dependencies across 
+sources.
+Core - relational graph
+Source-linked claims
+Inspect the page, section or evidence span 
+behind important statements.
+Core
+Uncertainty and conflict flags
+See what is inferred, missing, stale or 
+contradictory.
+Core
+Departure Impact Analysis
+Find work, dependencies and approvals 
+affected by a named member leaving.
+Core
+Authority Graph and permission service
+Scope access, delegate bounded powers and 
+prevent unauthorised retrieval.
+Core
+Review, approval and versioning
+Correct, reject, approve and preserve a review 
+trail.
+Core
+Successor view and acknowledgement
+Share approved content and record receipt.
+Core
+Interactive successor Q&A
+Ask questions against the approved, 
+permission-filtered handover.
+Round 3 improvement
+Illustrative handover output
+SECTION
+EXAMPLE CONTENT
+EVIDENCE / STATE
+Responsibility
+Payment API integration and release-
+readiness checks.
+Assigned task export + API specification; 
+supported.
+Decision
+PostgreSQL selected for transactional project 
+data.
+Architecture notes; supported. Rationale only 
+shown if documented.
+Work in progress
+Migration script prepared; integration test still 
+pending.
+Task export + meeting note; current status 
+needs reviewer confirmation.
+Dependency
+Release test depends on staging credentials 
+and payment sandbox access.
+Setup guide; supported, access itself remains 
+separately controlled.
+Risk / gap
+No rollback procedure found in the uploaded 
+documents.
+Search coverage note; missing evidence, not 
+proof no procedure exists.
+Next action
+Assign a reviewer to validate migration and 
+document rollback steps.
+Suggested action; requires owner assignment.
+The sample is illustrative, not a claim that the system has already been built or tested. A real output will preserve the specific source references and 
+permission labels for each item.
+PROJECTPULSE  /  ROUND 1 PRODUCT PROPOSAL
+CONFIDENTIALITY-AWARE CONCEPT PROPOSAL  •  10
+09 / TECHNICAL ARCHITECTURE
+A buildable architecture with clear trust boundaries
+The initial version uses a conventional web application and relational database. The AI layer structures and retrieves 
+evidence; a separate permission service controls what enters the model context.
+Proposed technology stack
+LAYER
+PROPOSED TECHNOLOGY
+ROLE IN THE PRODUCT
+Frontend
+Next.js / React, TypeScript, Tailwind CSS
+Workspace, document library, graph views, 
+reviewer console and successor handover.
+Backend API
+Python + FastAPI
+Authentication, workspace operations, 
+ingestion jobs, handover workflow and 
+permission checks.
+Document processing
+PyMuPDF, python-docx, standard 
+CSV/Markdown parsers
+Extract text, tables and source locations from 
+supported files.
+AI / language model
+LLM API with structured-output support
+Entity extraction, relationship proposals, 
+contradiction/gap detection and handover 
+drafting.
+Data layer
+PostgreSQL
+Projects, users, roles, permissions, 
+documents, evidence, graph edges, approvals 
+and audit events.
+Semantic retrieval
+pgvector (optional in MVP)
+Retrieve relevant evidence chunks after 
+permission filtering.
+Security / delivery
+JWT or secure session auth, password hashing, 
+Docker, environment-managed secrets
+Identity, API protection, repeatable 
+deployment and secret handling.
+Testing
+Pytest, API tests and role/permission test 
+matrix
+Validate extraction, workflow transitions, 
+traceability and access boundaries.
+Core data entities
+Workspace, Project, Member, Role, Permission, Delegation, Document, EvidenceChunk, KnowledgeItem, 
+Relationship, Handover, HandoverItem, ReviewRecord, Version and AccessEvent. Each source and derived evidence 
+item carries an access scope or a reference to the policy that governs it.
+AI orchestration pattern
+Use bounded, testable steps rather than an unconstrained autonomous agent: parse -> extract structured 
+candidates -> resolve entities -> link evidence -> detect conflicts/gaps -> permission-filter retrieval -> draft handover 
+-> human review. The application stores structured items and evidence references, not only a block of generated 
+text.
+PROJECTPULSE  /  ROUND 1 PRODUCT PROPOSAL
+CONFIDENTIALITY-AWARE CONCEPT PROPOSAL  •  11
+10 / TRUST, PRIVACY & FEASIBILITY
+Permission checks before intelligence
+The organiser explicitly requires that connected sources do not become universally visible, and that uncertainty and 
+human approval remain visible throughout the workflow.
+Security and responsible handling
+Authorised-source rule: users may upload only documents they are permitted to share; demonstrations use synthetic, 
+public, permissioned or anonymised data.
+Least privilege: access is granted for a defined resource and action; default access is restricted until explicitly granted.
+Pre-retrieval enforcement: the backend checks the requesting user’s effective permissions before retrieving source 
+chunks or sending them to the model.
+Output enforcement: generated handover items retain source permissions; content is filtered or redacted before 
+display and sharing. The model prompt is not the security boundary.
+Human control: an authorised reviewer may edit, reject or approve; no external sharing occurs before approval.
+Audit and lifecycle: grants, revocations, delegation, approval, version changes and acknowledgement are logged. 
+Revoked access must stop future retrieval and display.
+Data minimisation: process only the documents and context needed for the selected project and handover; keep 
+secrets out of prompts and logs.
+Feasible MVP - what we will actually prove
+IN SCOPE FOR MVP
+OUT OF SCOPE FOR MVP
+Single project workspace; PDF/DOCX/TXT/MD/CSV upload; role 
+setup; document-level scopes; structured knowledge extraction; 
+relational knowledge graph; evidence and uncertainty labels; 
+member departure analysis; draft handover; reviewer approval; 
+version record; role-filtered successor sharing.
+Live connectors to Slack/Teams/GitHub/Jira; automatic HR 
+departure detection; organisation-wide identity federation; 
+complex policy inheritance across many tenants; autonomous 
+approval; full enterprise graph database; broad multilingual 
+support.
+Key risks and mitigations
+RISK
+MITIGATION
+Incorrect extraction or hallucination
+Structured schemas, source refs, confidence/status labels and 
+human review.
+Conflicting or outdated files
+Dates/version metadata, supersession links and explicit conflict 
+display.
+Permission leakage
+Backend enforcement before retrieval and before output; negative 
+permission tests.
+Over-scoped build
+One complete document-to-handover journey; integrations 
+deferred.
+Sensitive demo material
+Synthetic/anonymised examples and clear source-authorisation 
+rules.
+PROJECTPULSE  /  ROUND 1 PRODUCT PROPOSAL
+CONFIDENTIALITY-AWARE CONCEPT PROPOSAL  •  12
+11 / DEVELOPMENT PLAN
+Three rounds, one continuous product
+Each round has a concrete outcome and acceptance test. The roadmap deliberately reserves advanced capabilities 
+until the central workflow is reliable.
+ROUND
+FOCUS & BUILD PLAN
+EXPECTED DELIVERABLE / ACCEPTANCE
+ROUND 1
+THE PLAN
+Define target users and first scenario; finalise 
+workflow; specify Knowledge and Authority 
+Graphs; map roles, scopes and trust 
+boundaries; select document formats and 
+stack; prepare synthetic demo data and test 
+cases.
+This proposal, workflow and architecture 
+diagrams, role/permission matrix, data model, 
+scoped MVP and a prioritised build backlog. 
+Round 1 is planning; no completed product is 
+claimed.
+ROUND 2
+THE BUILD
+Implement workspace/auth; authorised file 
+upload and parsing; structured extraction; 
+source-linked evidence store; relational 
+knowledge graph; scoped permissions and 
+delegation; departure-impact analysis; draft 
+handover; reviewer correction/approval; 
+controlled successor sharing.
+A judge can upload authorised documents, 
+inspect reconstructed knowledge and sources, 
+review/approve a handover and open a role-
+filtered successor view end-to-end. Provide 
+deployed demo, source repository, test 
+evidence and updated technical notes.
+ROUND 3
+THE FINISH
+Deliver the three substantial improvements 
+committed below; improve reliability, usability, 
+evidence quality, permission testing and 
+documentation.
+A complete real-world-style transition journey, 
+demo/video, repository and setup guide, test 
+notes, privacy/security explanation, limitations 
+and final roadmap.
+Three substantial Round 3 commitments
+COMMITMENT
+WHAT CHANGES FOR THE USER
+HOW IT WILL BE DEMONSTRATED
+1. AI-guided Handover Interview
+System asks the departing member targeted 
+questions based on detected gaps, ownerless 
+tasks and undocumented procedures. 
+Answers are marked as member-provided and 
+reviewed.
+A gap triggers a focused question; the answer 
+is linked to the handover and remains pending 
+until verified.
+2. Permission-aware successor Q&A
+Incoming member asks questions against the 
+approved handover and permitted source set. 
+Responses cite evidence and state when 
+information is missing.
+Demonstrate an authorised answer and an 
+access-denied question that does not reveal 
+restricted source content.
+3. Change-aware handover versions
+New evidence or a corrected decision 
+produces a reviewable change set and 
+updated handover version.
+Show previous vs current content, changed 
+evidence and reviewer approval before 
+republishing.
+Round planning follows the organiser’s Round 1 / Round 2 / Round 3 framework and its judging emphasis on workflow completeness, reliability and 
+delivered improvements (challenge brief pages 3-5).
+PROJECTPULSE  /  ROUND 1 PRODUCT PROPOSAL
+CONFIDENTIALITY-AWARE CONCEPT PROPOSAL  •  13
+12 / TEAM RESPONSIBILITIES & EXPECTED IMPACT
+Clear ownership, measurable outcomes
+Responsibilities are organised by workstream. Assign actual participants only after confirming the team roster and 
+each person’s intended contribution.
+WORKSTREAM / ROLE
+RESPONSIBILITIES
+ROUND 2 OUTPUT
+Product & UX Lead
+User journey, scope control, handover 
+templates, usability, prioritisation and 
+stakeholder validation.
+Workspace flow, departure setup, reviewer 
+and successor experiences.
+Backend & Data Lead
+FastAPI services, PostgreSQL schema, 
+authentication, permission evaluation, 
+delegation and audit events.
+APIs, core data model, authority service and 
+controlled sharing.
+AI & Document Intelligence Lead
+Document parsing, structured extraction, 
+evidence linking, relationship proposals, 
+conflict/gap detection and prompt evaluation.
+Ingestion pipeline, knowledge items, citations 
+and handover draft generation.
+Frontend & Integration Lead
+React/Next.js screens, file upload, knowledge 
+views, authority controls and API integration.
+Working project console, reviewer UI and 
+successor view.
+QA, Security & Demo Lead
+Test design, synthetic data, role-matrix 
+validation, failure cases, documentation and 
+demonstration.
+Test reports, permission tests, reproducible 
+demo and technical documentation.
+For a smaller team, workstreams may be combined. Every participant must be able to explain their actual contribution; the role descriptions above 
+are proposed allocations, not claims about named individuals.
+Expected impact
+Reduce transition friction by giving successors a structured starting point instead of requiring them to reconstruct 
+context from scratch.
+Reduce loss of decision reasoning and operational memory by preserving source-linked context across documents and 
+time.
+Expose hidden dependencies, ownerless work and undocumented procedures before they become avoidable delays or 
+failures.
+Improve accountability through explicit next actions, owners, review status and acknowledgement.
+Protect organisational trust by limiting access to what each recipient is authorised to receive.
+How impact will be measured
+METRIC
+MEASUREMENT APPROACH
+Time to first independent task
+Elapsed time from successor receiving the handover to completing a 
+defined first task without extra clarification.
+Evidence coverage
+Percentage of factual handover claims that link to inspectable, 
+authorised evidence.
+Review effort
+Reviewer time and number of substantive corrections before approval.
+Continuity completeness
+Share of identified active tasks with an owner, current state and next 
+action.
+Permission safety
+Unauthorised retrieval/display cases in the test matrix; target is zero in 
+tested scenarios.
+These are proposed evaluation metrics. No measured improvement or numerical reduction is claimed before testing.
+PROJECTPULSE  /  ROUND 1 PRODUCT PROPOSAL
+CONFIDENTIALITY-AWARE CONCEPT PROPOSAL  •  14
+13 / FUTURE SCOPE & LIMITATIONS
+Grow from document handover to organisational 
+continuity
+The core architecture can expand gradually without making the first product dependent on broad integrations or 
+complex enterprise deployment.
+After the event: possible extensions
+DIRECTION
+FUTURE CAPABILITY
+VALUE
+More source connectors
+Authorised integrations with repositories, task 
+boards, meeting notes and communication 
+platforms.
+Reduce manual export and improve freshness 
+while preserving source-level permissions.
+Continuous project memory
+Change detection, source refresh, stale-fact 
+alerts and ownership drift monitoring.
+Keep project context useful between 
+handovers, not only at departure time.
+Advanced authority policies
+Time-bound delegation, approval chains, 
+policy inheritance, temporary access and 
+richer audit controls.
+Support larger organisations and more 
+complex governance requirements.
+Richer knowledge graph
+Graph database evaluation, cross-project 
+dependencies and reusable process 
+knowledge.
+Support complex relationship exploration at 
+scale.
+Broader accessibility
+Multilingual document handling, accessible UI, 
+templates for different team settings.
+Make the universal workflow easier to adopt 
+across varied organisations.
+Analytics and governance
+Knowledge concentration indicators, recurring 
+gap patterns and handover quality 
+dashboards.
+Help leaders identify continuity risks without 
+treating AI scores as performance 
+judgements.
+Known limitations to communicate honestly
+Document-first ingestion cannot automatically discover information that remains only in unexported chats, private 
+repositories or verbal conversations.
+Extraction quality depends on document clarity, language, formatting and the completeness of authorised sources.
+A missing source does not prove that a process or document does not exist; the system can report only what it could 
+inspect.
+The Authority Graph is an application-level policy model. Real deployment must integrate with each organisation’s 
+identity, data classification and legal requirements.
+A role-appropriate draft still requires accountable human review, especially for sensitive, regulated or high-impact 
+work.
+Design principle for scale
+AUTOMATE PREPARATION, NOT ACCOUNTABILITY
+ProjectPulse should make project context easier to find and safer to transfer. It should never replace the person 
+responsible for deciding whether a claim is correct, whether access is appropriate or whether a handover is ready to 
+publish.
+Alignment to the challenge
+The proposal directly addresses the brief’s expected outcome: authorised source ingestion, project-state reconstruction, evidence-
+linked summaries, risk and dependency identification, human review, controlled sharing and a clear continuation path for the 
+incoming person. The MVP prioritises a functional vertical slice over a broad but shallow feature list.
+PROJECTPULSE  /  ROUND 1 PRODUCT PROPOSAL
+CONFIDENTIALITY-AWARE CONCEPT PROPOSAL  •  15
+14 / PARTICIPANT DETAILS & SUBMISSION READINESS
+Complete and verify before upload
+The organiser requires complete participant details and truthful contribution reporting. The fields below are 
+intentionally left editable because names and contact details were not supplied.
+ACTION REQUIRED BEFORE SUBMISSION
+Replace every [ENTER ...] field, confirm spelling and roles with all participants, and match the official registration form 
+exactly. Do not submit this PDF with placeholders remaining.
+TEAM INFORMATION
+DETAIL
+Official team name
+[ENTER EXACT REGISTERED TEAM NAME]
+Institution / college / organisation
+[ENTER OFFICIAL INSTITUTION NAME]
+Team lead / primary contact
+[ENTER FULL NAME]
+Team lead email
+[ENTER EMAIL]
+Team lead contact (if required)
+[ENTER CONTACT NUMBER]
+Team size
+[ENTER NUMBER OF PARTICIPANTS]
+Participant roster and contribution details
+#
+FULL NAME
+INSTITUTION / 
+DEPARTMENT
+EMAIL
+ROLE & INDIVIDUAL 
+CONTRIBUTION
+1
+[ENTER NAME]
+[ENTER]
+[ENTER]
+[ENTER ACTUAL ROLE]
+2
+[ENTER NAME]
+[ENTER]
+[ENTER]
+[ENTER ACTUAL ROLE]
+3
+[ENTER NAME]
+[ENTER]
+[ENTER]
+[ENTER ACTUAL ROLE]
+4
+[ENTER NAME]
+[ENTER]
+[ENTER]
+[ENTER ACTUAL ROLE]
+5
+[ENTER NAME]
+[ENTER]
+[ENTER]
+[ENTER ACTUAL ROLE]
+Source basis and submission integrity
+Primary source: We Code Coders, “Hackathon Challenge Brief - Prevent Critical Knowledge From Leaving With 
+People,” seven-page problem statement supplied by the team. This proposal follows its required workflow and trust 
+requirements (brief pp. 1-2), Round 1 planning expectations and judging criteria (p. 3), Round 2 and Round 3 
+outcomes (pp. 4-5), and participation, data responsibility and disclosure rules (pp. 6-7).
+The product name, feature set, architecture and roadmap in this document are the team’s proposed plan, not claims of completed 
+implementation. No interviews, surveys, performance benchmarks, integrations or deployed features are represented as 
+completed. AI assistance and external tools used during development should be disclosed in accordance with organiser rules.
+Final upload checklist
+
+  All bracketed team and participant fields have been replaced.
+☐
+
+  Team name and participant spellings match the registration form.
+☐
+
+  Every participant’s role and contribution are accurate and explainable.
+☐
+
+  PDF uploaded to Google Drive with “Anyone with the link - Viewer” access.
+☐
+
+  Link tested in an incognito window before submission.
+☐
+
+  Round 1 submission form completed before the organiser’s deadline.
+☐
+Submission form: https://forms.gle/mUJCpgHpZLr9KNR78
+Problem statement source: supplied PDF, “Knowledge_Handover_Problem_Statement.pdf”.

@@ -30,6 +30,7 @@ from app.schemas.knowledge import (
     EvidenceOut,
     GraphNode,
     GraphOut,
+    KnowledgeItemCreateIn,
     KnowledgeItemOut,
     KnowledgeListOut,
     ReviewIn,
@@ -383,6 +384,51 @@ def delete_knowledge_item(
     )
     db.commit()
     return OkResponse(message="Knowledge item deleted.")
+
+
+@router.post("/{project_id}/knowledge", response_model=KnowledgeItemOut)
+def create_knowledge_item(
+    project_id: uuid.UUID,
+    payload: KnowledgeItemCreateIn,
+    ctx: ProjectContext = Depends(project_context),
+    db: Session = Depends(get_db),
+) -> KnowledgeItemOut:
+    """Manually create a knowledge item (decision, risk, task, dependency, etc.)."""
+    if not can_review(ctx.role):
+        raise PermissionError_("Only a project head or lead can create knowledge items.")
+
+    item = KnowledgeItem(
+        id=uuid.uuid4(),
+        project_id=ctx.project.id,
+        type=str(payload.type),
+        title=payload.title.strip(),
+        description=payload.description.strip(),
+        reasoning=payload.reasoning.strip() if payload.reasoning else None,
+        attributes=payload.attributes or {},
+        evidence_status=payload.evidence_status,
+        access_scope=payload.access_scope,
+        subject_user_id=payload.subject_user_id,
+        source_document_id=None,
+        is_sample=False,
+        review_state=ReviewState.PENDING,
+        created_at=utcnow(),
+        updated_at=utcnow(),
+    )
+    db.add(item)
+    audit.record(
+        db,
+        action=audit.A.KNOWLEDGE_CREATE,
+        actor_id=ctx.user.id,
+        project_id=ctx.project.id,
+        workspace_id=ctx.project.workspace_id,
+        target_type="knowledge_item",
+        target_id=item.id,
+        summary=f"create: {item.title[:80]}",
+        meta={"type": item.type, "evidence_status": item.evidence_status},
+    )
+    db.commit()
+    db.refresh(item)
+    return _item_out(db, item)
 
 
 _GRAPH_NODE_CAP = 400

@@ -94,7 +94,18 @@ class EvidenceOut(ApiModel):
     confidence: str | None = None
 
 
+class KnowledgeItemCreateIn(ApiModel):
+    type: KnowledgeType
+    title: str = Field(min_length=1, max_length=400)
+    description: str = Field(default="", max_length=4000)
+    reasoning: str | None = Field(default=None, max_length=4000)
+    attributes: dict = Field(default_factory=dict)
+    evidence_status: EvidenceStatus = Field(default=EvidenceStatus.SUPPORTED)
+    access_scope: AccessScope = Field(default=AccessScope.PROJECT)
+    subject_user_id: UUID | None = None
+
+
 __all__ = [
     "KnowledgeItemOut", "KnowledgeListOut", "ReviewIn", "EdgeOut",
-    "GraphNode", "GraphOut", "EvidenceOut",
+    "GraphNode", "GraphOut", "EvidenceOut", "KnowledgeItemCreateIn",
 ]

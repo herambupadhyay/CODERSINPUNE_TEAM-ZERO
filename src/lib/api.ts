@@ -25,6 +25,7 @@ import type {
   InvitationOut,
   ImpactAnalysis,
   JobOut,
+  KnowledgeItemCreate,
   KnowledgeItemOut,
   KnowledgeListOut,
   KnowledgeQuery,
@@ -290,6 +291,11 @@ export const knowledgeApi = {
     api<EvidenceOut[]>(`/projects/${projectId}/knowledge/${itemId}/evidence`),
   remove: (projectId: string, itemId: string) =>
     api<OkOut>(`/projects/${projectId}/knowledge/${itemId}`, { method: 'DELETE' }),
+  create: (projectId: string, payload: KnowledgeItemCreate) =>
+    api<KnowledgeItemOut>(`/projects/${projectId}/knowledge`, {
+      method: 'POST',
+      json: payload,
+    }),
 }
 
 // ---- graph / authority ----------------------------------------------------
